@@ -4,7 +4,7 @@
       <h1 class="text-3xl sm:text-4xl font-black mb-2 bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
         🚀 加入遊戲
       </h1>
-      <p class="text-surface-400 text-sm sm:text-lg">申請加入積分大富翁，開始你的冒險之旅！</p>
+      <p class="text-surface-400 text-sm sm:text-lg">申請加入All-Star，開始你的冒險之旅！</p>
     </div>
 
     <!-- Success State -->
@@ -117,6 +117,6 @@ async function handleSubmit() {
   }
 }
 
-useHead({ title: '積分大富翁 - 加入遊戲' })
+useHead({ title: 'All-Star - 加入遊戲' })
 </script>
 

@@ -6,7 +6,7 @@
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-sm font-black">
           ⚙️
         </div>
-        <h1 class="text-base font-bold text-primary-400">積分大富翁管理</h1>
+        <h1 class="text-base font-bold text-primary-400">All-Star管理</h1>
       </div>
       <button
         class="p-2 rounded-xl bg-surface-700/50 hover:bg-surface-700 text-surface-200 active:scale-95 transition"
@@ -42,7 +42,7 @@
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
     >
       <div class="p-6 border-b border-surface-700 flex items-center justify-between">
-        <h1 class="text-xl font-bold text-primary-400">積分大富翁管理</h1>
+        <h1 class="text-xl font-bold text-primary-400">All-Star管理</h1>
         <button class="md:hidden text-surface-400 hover:text-white" @click="sidebarOpen = false">
           ✕
         </button>

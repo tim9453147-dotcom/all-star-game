@@ -10,7 +10,7 @@
               🎲
             </div>
             <span class="text-xl font-extrabold bg-gradient-to-r from-white via-primary-200 to-accent-300 bg-clip-text text-transparent">
-              積分大富翁
+              All-Star
             </span>
           </NuxtLink>
 
@@ -65,7 +65,7 @@
 
     <!-- Footer -->
     <footer class="border-t border-white/5 py-8 text-center text-surface-500 text-xs sm:text-sm px-4">
-      <p>© {{ new Date().getFullYear() }} 積分大富翁 — 累積積分，贏取獎勵</p>
+      <p>© {{ new Date().getFullYear() }} All-Star — 累積積分，贏取獎勵</p>
     </footer>
   </div>
 </template>

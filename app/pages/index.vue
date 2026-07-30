@@ -3,9 +3,8 @@
     <!-- Hero Section -->
     <div class="text-center mb-6 sm:mb-10 px-2">
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-accent-400 via-accent-300 to-primary-400 bg-clip-text text-transparent">
-        積分大富翁
+        All-Star
       </h1>
-      <p class="text-surface-400 text-sm sm:text-lg">完成任務累積積分，在棋盤上前進！</p>
     </div>
 
     <!-- Mobile View Switcher Tabs -->
@@ -388,7 +387,7 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: '積分大富翁 - 棋盤',
+  title: 'All-Star - 棋盤',
 })
 </script>
 

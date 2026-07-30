@@ -87,6 +87,6 @@ function isUnlocked(reward: Reward) {
   return highestScore.value >= reward.points_required
 }
 
-useHead({ title: '積分大富翁 - 獎勵' })
+useHead({ title: 'All-Star - 獎勵' })
 </script>
 

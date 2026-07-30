@@ -1,4 +1,4 @@
-# 積分大富翁 (Score Monopoly) 🎲
+# All-Star (Score Monopoly) 🎲
 
 [![Nuxt](https://img.shields.io/badge/Nuxt-4.x-00DC82?logo=nuxt.js&logoColor=white)](https://nuxt.com/)
 [![Vue](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vuedotjs&logoColor=white)](https://vuejs.org/)
@@ -6,7 +6,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Bun](https://img.shields.io/badge/Bun-1.x-FBF0DF?logo=bun&logoColor=black)](https://bun.sh/)
 
-「積分大富翁」是一個結合任務完成、積分累積與大富翁棋盤機制的互動遊戲系統。玩家透過完成各項指定的任務累積點數，點數直接決定玩家在環狀大富翁地圖上的棋子位置，並在達到特定里程碑時解鎖獎勵！
+「All-Star」是一個結合任務完成、積分累積與大富翁棋盤機制的互動遊戲系統。玩家透過完成各項指定的任務累積點數，點數直接決定玩家在環狀大富翁地圖上的棋子位置，並在達到特定里程碑時解鎖獎勵！
 
 ---
 

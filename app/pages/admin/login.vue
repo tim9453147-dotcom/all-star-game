@@ -1,36 +1,51 @@
 <template>
   <div class="min-h-screen bg-surface-900 flex items-center justify-center p-4">
-    <div class="max-w-md w-full bg-surface-800 rounded-xl shadow-2xl p-8 border border-surface-700">
-      <h1 class="text-3xl font-bold text-center text-primary-400 mb-8">管理員登入</h1>
-      <form @submit.prevent="handleLogin" class="space-y-6">
+    <div class="max-w-md w-full bg-surface-800 rounded-3xl shadow-2xl p-6 sm:p-8 border border-surface-700">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-2xl mx-auto mb-3 shadow-lg">
+          🔐
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">管理員登入</h1>
+        <p class="text-xs sm:text-sm text-surface-400 mt-1">請輸入存取憑證以進入後台</p>
+      </div>
+
+      <form @submit.prevent="handleLogin" class="space-y-5">
         <div>
-          <label class="block text-sm font-medium text-surface-300 mb-2">帳號</label>
+          <label class="block text-xs sm:text-sm font-semibold text-surface-300 mb-1.5">帳號</label>
           <input 
             v-model="username" 
             type="text" 
             required
-            class="w-full bg-surface-900 border border-surface-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
+            placeholder="請輸入帳號"
+            class="w-full bg-surface-900 border border-surface-600 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/50 transition-all"
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-surface-300 mb-2">密碼</label>
+          <label class="block text-xs sm:text-sm font-semibold text-surface-300 mb-1.5">密碼</label>
           <input 
             v-model="password" 
             type="password" 
             required
-            class="w-full bg-surface-900 border border-surface-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors"
+            placeholder="請輸入密碼"
+            class="w-full bg-surface-900 border border-surface-600 rounded-xl px-4 py-3 text-base text-white focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/50 transition-all"
           />
         </div>
-        <div v-if="error" class="text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-lg border border-red-500/20">
+        <div v-if="error" class="text-red-400 text-xs sm:text-sm text-center bg-red-900/20 p-3 rounded-xl border border-red-500/20">
           {{ error }}
         </div>
         <button 
           type="submit" 
           :disabled="loading"
-          class="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50"
+          class="w-full bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg shadow-primary-500/20 disabled:opacity-50 active:scale-95"
         >
-          {{ loading ? '登入中...' : '登入' }}
+          {{ loading ? '⏳ 登入中...' : '🔐 登入管理後台' }}
         </button>
+
+        <div class="text-center pt-2">
+          <NuxtLink to="/" class="text-xs text-surface-400 hover:text-surface-200 transition">
+            ← 返回前台大富翁
+          </NuxtLink>
+        </div>
       </form>
     </div>
   </div>
@@ -61,3 +76,4 @@ const handleLogin = async () => {
   loading.value = false
 }
 </script>
+

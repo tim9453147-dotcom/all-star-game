@@ -1,50 +1,104 @@
 <template>
   <div>
     <!-- Status Message -->
-    <div v-if="message" class="mb-4 p-4 rounded-xl text-sm" :class="messageType === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'">
+    <div v-if="message" class="mb-4 p-4 rounded-xl text-xs sm:text-sm font-semibold" :class="messageType === 'success' ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'">
       {{ message }}
     </div>
 
     <!-- Add Task Form -->
-    <div class="bg-surface-800/50 border border-white/10 rounded-2xl p-6 mb-6">
-      <h3 class="text-sm font-bold text-surface-300 mb-4">➕ 新增任務</h3>
-      <form @submit.prevent="addTask" class="flex flex-wrap gap-3 items-end">
-        <div class="flex-1 min-w-[180px]">
-          <label class="block text-xs text-surface-400 mb-1">任務名稱</label>
+    <div class="bg-surface-800/50 border border-white/10 rounded-2xl p-4 sm:p-6 mb-6 shadow-xl">
+      <h3 class="text-sm font-bold text-surface-300 mb-4 flex items-center gap-1.5">➕ 新增任務</h3>
+      <form @submit.prevent="addTask" class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
+        <div class="flex-1">
+          <label class="block text-xs text-surface-400 mb-1 font-medium">任務名稱</label>
           <input
             v-model="newTask.name"
             type="text"
             required
             placeholder="輸入任務名稱"
-            class="w-full px-4 py-2.5 bg-surface-700/50 border border-white/10 rounded-xl text-sm text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition"
+            class="w-full px-4 py-3 bg-surface-700/50 border border-white/10 rounded-xl text-base sm:text-sm text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition"
           />
         </div>
-        <div class="w-32">
-          <label class="block text-xs text-surface-400 mb-1">積分</label>
+        <div class="w-full sm:w-32">
+          <label class="block text-xs text-surface-400 mb-1 font-medium">積分</label>
           <input
             v-model.number="newTask.points"
             type="number"
             required
             min="1"
             placeholder="積分"
-            class="w-full px-4 py-2.5 bg-surface-700/50 border border-white/10 rounded-xl text-sm text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition"
+            class="w-full px-4 py-3 bg-surface-700/50 border border-white/10 rounded-xl text-base sm:text-sm text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition"
           />
         </div>
         <button
           type="submit"
-          class="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 rounded-xl text-sm font-semibold transition shadow-lg shadow-primary-500/20"
+          class="px-6 py-3.5 bg-primary-600 hover:bg-primary-500 rounded-xl text-sm font-bold transition shadow-lg shadow-primary-500/20 active:scale-95 shrink-0"
         >
-          新增
+          新增任務
         </button>
       </form>
     </div>
 
-    <!-- Tasks Table -->
-    <div class="bg-surface-800/50 border border-white/10 rounded-2xl overflow-hidden">
+    <!-- Mobile Card View (< md) -->
+    <div class="md:hidden space-y-3">
+      <div
+        v-for="task in tasks"
+        :key="'m-task-' + task.id"
+        class="bg-surface-800/60 border border-white/10 rounded-2xl p-4 shadow-md flex flex-col gap-2"
+      >
+        <template v-if="editing === task.id">
+          <div class="space-y-2 py-1">
+            <div>
+              <label class="block text-[11px] text-surface-400 mb-1">任務名稱</label>
+              <input v-model="editForm.name" class="w-full px-3 py-2 bg-surface-700 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+            </div>
+            <div>
+              <label class="block text-[11px] text-surface-400 mb-1">任務積分</label>
+              <input v-model.number="editForm.points" type="number" min="1" class="w-full px-3 py-2 bg-surface-700 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+            </div>
+          </div>
+          <div class="flex gap-2 justify-end pt-2 border-t border-white/10">
+            <button class="px-4 py-2 bg-green-500/20 text-green-400 rounded-xl text-xs font-bold hover:bg-green-500/30 transition" @click="saveEdit(task.id)">儲存</button>
+            <button class="px-4 py-2 bg-surface-700 text-surface-300 rounded-xl text-xs font-semibold hover:bg-surface-600 transition" @click="editing = null">取消</button>
+          </div>
+        </template>
+        <template v-else>
+          <div class="flex items-start justify-between">
+            <div class="font-bold text-base text-white">{{ task.name }}</div>
+            <div class="text-right">
+              <span class="text-lg font-black text-accent-400">+{{ task.points }}</span>
+              <span class="text-xs text-surface-400 ml-0.5">分</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-white/5">
+            <span
+              class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"
+              :class="task.status === 'active' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'"
+            >
+              {{ task.status === 'active' ? '啟用中' : '已停用' }}
+            </span>
+            <div class="flex gap-2">
+              <button class="px-3 py-1.5 bg-primary-500/20 text-primary-300 border border-primary-500/30 rounded-xl text-xs font-bold" @click="startEdit(task)">編輯</button>
+              <button
+                class="px-3 py-1.5 rounded-xl text-xs font-bold transition"
+                :class="task.status === 'active' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-green-500/20 text-green-400 border border-green-500/30'"
+                @click="toggleStatus(task)"
+              >
+                {{ task.status === 'active' ? '停用' : '啟用' }}
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div v-if="(tasks || []).length === 0" class="text-center py-12 text-surface-400 text-sm">尚無任務</div>
+    </div>
+
+    <!-- Desktop Tasks Table (>= md) -->
+    <div class="hidden md:block bg-surface-800/50 border border-white/10 rounded-2xl overflow-hidden shadow-xl">
       <div class="overflow-x-auto">
         <table class="w-full">
           <thead>
-            <tr class="border-b border-white/10">
+            <tr class="border-b border-white/10 bg-surface-800/80">
               <th class="text-left px-6 py-4 text-xs font-semibold text-surface-400 uppercase">任務名稱</th>
               <th class="text-left px-6 py-4 text-xs font-semibold text-surface-400 uppercase">積分</th>
               <th class="text-left px-6 py-4 text-xs font-semibold text-surface-400 uppercase">狀態</th>
@@ -106,6 +160,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'admin' })

@@ -30,7 +30,7 @@
 ```bash
 # 1. Clone 並安裝依賴
 git clone <repo-url>
-cd score-monopoly
+cd all-star-game
 bun install
 
 # 2. 設定環境變數
@@ -52,7 +52,7 @@ bun run dev
 ## 📁 專案結構 (Project Structure)
 
 ```text
-score-monopoly/
+all-star-game/
 ├── app/
 │   ├── composables/    # Vue Composables
 │   ├── layouts/        # 頁面版型 (default, admin)
@@ -108,31 +108,38 @@ score-monopoly/
 
 ---
 
-## ☁️ 部署到 Cloudflare
+## ☁️ 部署到 Cloudflare Pages
+
+### 完整 CLI 指令部署步驟
 
 ```bash
-# 1. 安裝 Wrangler 並登入
-bun add -g wrangler
-wrangler login
+# 1. 登入 Cloudflare 帳號
+bunx wrangler login
 
 # 2. 建立 Cloudflare D1 資料庫
-wrangler d1 create score-monopoly-db
-# 複製產生的 database_id 到 wrangler.toml
+bunx wrangler d1 create all-star-game-db
+# 複製輸出終端機中的 database_id 並貼至 wrangler.toml 的 database_id 欄位
 
-# 3. 執行 Migration（在遠端 D1）
-wrangler d1 execute score-monopoly-db --remote --file=server/database/migrations/0001_initial.sql
+# 3. 執行資料庫 Migration（建立遠端 D1 資料表與預設資料）
+bunx wrangler d1 execute all-star-game-db --remote --file=server/database/migrations/0001_initial.sql
 
-# 4. 設定環境變數
-# 到 Cloudflare Dashboard > Pages > Settings > Environment Variables
-# 設定以下變數（加 NUXT_ 前綴）：
-#   NUXT_ADMIN_USERNAME=你的管理員帳號
-#   NUXT_ADMIN_PASSWORD=你的管理員密碼
-#   NUXT_SESSION_SECRET=至少32字元的隨機字串
+# 4. 下指令設定管理員帳號密碼與 Session 密鑰 (Secrets)
+# 方式 A：單獨下指令設定（會提示輸入密碼）
+bunx wrangler pages secret put NUXT_ADMIN_USERNAME --project-name all-star-game
+bunx wrangler pages secret put NUXT_ADMIN_PASSWORD --project-name all-star-game
+bunx wrangler pages secret put NUXT_SESSION_SECRET --project-name all-star-game
 
-# 5. 建置並部署
+# 方式 B：也可透過 .env 檔案批次匯入環境變數
+# bunx wrangler pages secret bulk .env --project-name all-star-game
+
+# 5. 建置專案與部署至 Cloudflare Pages
 NITRO_PRESET=cloudflare-pages bun run build
-wrangler pages deploy .output/public
+bunx wrangler pages deploy .output/public --project-name all-star-game
 ```
+
+> **💡 提示：** 
+> - 除了透過 CLI 之外，亦可至 Cloudflare Dashboard > Pages > 你的專案 > **Settings** > **Environment variables** 頁面設定上述變數。
+> - `NUXT_SESSION_SECRET` 請填寫長度至少 32 字元以上的隨機字串以確保 Session 安全。
 
 ---
 

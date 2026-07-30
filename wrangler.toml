@@ -1,0 +1,12 @@
+name = "score-monopoly"
+compatibility_date = "2025-07-15"
+
+# Cloudflare Pages configuration
+# Deploy with: NITRO_PRESET=cloudflare-pages bun run build && wrangler pages deploy .output/public
+
+[[d1_databases]]
+binding = "DB"
+database_name = "score-monopoly-db"
+database_id = "YOUR_D1_DATABASE_ID"
+# Create with: wrangler d1 create score-monopoly-db
+# Then replace YOUR_D1_DATABASE_ID above

@@ -81,10 +81,7 @@ const { data: rewardsData } = await useFetch<Reward[]>('/api/rewards')
 const { data: playersData } = await useFetch<Player[]>('/api/players')
 
 const rewards = computed(() => rewardsData.value || [])
-const highestScore = computed(() => {
-  const p = playersData.value || []
-  return p.length > 0 ? p[0].total_score : 0
-})
+const highestScore = computed(() => (playersData.value || [])[0]?.total_score ?? 0)
 
 function isUnlocked(reward: Reward) {
   return highestScore.value >= reward.points_required

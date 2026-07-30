@@ -256,7 +256,7 @@ const { data: rewardsData } = await useFetch<Reward[]>('/api/rewards')
 
 const players = computed(() => playersData.value || [])
 const rewards = computed(() => rewardsData.value || [])
-const highestScore = computed(() => players.value.length > 0 ? players.value[0].total_score : 0)
+const highestScore = computed(() => players.value[0]?.total_score ?? 0)
 
 const activeMobileTab = ref<'board' | 'rank'>('board')
 const selectedPlayer = ref<Player | null>(null)

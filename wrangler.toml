@@ -1,13 +1,12 @@
 name = "all-star-game"
 compatibility_date = "2025-07-15"
-pages_build_output_dir = ".output/public"
+compatibility_flags = ["nodejs_compat"]
 
-# Cloudflare Pages configuration
-# Deploy with: NITRO_PRESET=cloudflare-pages bun run build && wrangler pages deploy .output/public
+# Cloudflare Pages build output directory
+pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "all-star-game-db"
 database_id = "3f70f99b-ae7b-4b11-8f93-cee357a71c32"
-# Create with: wrangler d1 create all-star-game-db
-# Then replace YOUR_D1_DATABASE_ID above
+migrations_dir = "server/database/migrations"

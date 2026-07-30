@@ -7,7 +7,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "db:migrate:local": "wrangler d1 migrations apply all-star-game-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply all-star-game-db --remote",
+    "deploy": "nuxt build && wrangler pages deploy dist --project-name all-star-game --branch main"
   },
   "dependencies": {
     "@nuxthub/core": "0.10.8",
@@ -18,5 +22,8 @@
     "sql.js": "^1.14.1",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.100.0"
   }
 }

@@ -1,39 +1,9 @@
 <template>
   <div class="py-4 sm:py-8 px-2 sm:px-4 max-w-7xl mx-auto">
-    <!-- Hero Section -->
-    <div class="text-center mb-6 sm:mb-10 px-2">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black mb-2 bg-gradient-to-r from-accent-400 via-accent-300 to-primary-400 bg-clip-text text-transparent">
-        All-Star
-      </h1>
-    </div>
-
-    <!-- Mobile View Switcher Tabs -->
-    <div class="flex xl:hidden justify-center mb-6 px-2">
-      <div class="bg-surface-800/80 p-1 rounded-2xl border border-white/10 flex gap-1 w-full max-w-xs shadow-lg">
-        <button
-          class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-1.5"
-          :class="activeMobileTab === 'board' ? 'bg-primary-600 text-white shadow-md' : 'text-surface-400 hover:text-white'"
-          @click="activeMobileTab = 'board'"
-        >
-          <span>🎲 棋盤</span>
-        </button>
-        <button
-          class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-1.5"
-          :class="activeMobileTab === 'rank' ? 'bg-accent-600 text-white shadow-md' : 'text-surface-400 hover:text-white'"
-          @click="activeMobileTab = 'rank'"
-        >
-          <span>🏆 排行與獎勵</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Board & Info Layout -->
-    <div class="flex flex-col xl:flex-row gap-6 sm:gap-8 items-center xl:items-start justify-center">
+    <!-- Board Layout -->
+    <div class="flex items-center justify-center">
       <!-- Circular Board Container -->
-      <div
-        v-show="activeMobileTab === 'board' || isDesktop"
-        class="w-full flex-1 flex flex-col items-center justify-center overflow-hidden py-2"
-      >
+      <div class="w-full flex-1 flex flex-col items-center justify-center overflow-hidden py-2">
         <!-- Board Wrapper -->
         <div
           ref="boardWrapper"
@@ -61,15 +31,6 @@
             }"
           />
 
-          <!-- Center Info -->
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div class="text-center select-none transform scale-90 sm:scale-100">
-              <div class="text-4xl sm:text-5xl mb-1 animate-bounce-slow">🎲</div>
-              <div class="text-xs sm:text-sm font-semibold text-surface-300">共 {{ players.length }} 位玩家</div>
-              <div class="text-[10px] text-surface-500 mt-1">100格 環形棋盤</div>
-            </div>
-          </div>
-
           <!-- Cells -->
           <div
             v-for="cell in cells"
@@ -81,7 +42,6 @@
           >
             <span v-if="cell.index === 0" class="text-[10px] sm:text-xs">GO</span>
             <span v-else-if="cell.index % 10 === 0">{{ cell.index }}</span>
-            <span v-else-if="cell.isMilestone" class="text-[10px] sm:text-xs">🎁</span>
           </div>
 
           <!-- Player Tokens -->
@@ -106,77 +66,6 @@
               <div class="text-accent-400 font-semibold">{{ player.total_score }} 分</div>
               <div class="text-surface-400">第 {{ Math.floor(player.total_score / 100) }} 圈 · 格子 {{ player.total_score % 100 }}</div>
               <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-surface-800 border-r border-b border-white/10 rotate-45" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Leaderboard & Rewards Column -->
-      <div
-        v-show="activeMobileTab === 'rank' || isDesktop"
-        class="w-full xl:w-80 shrink-0 space-y-6"
-      >
-        <!-- Leaderboard -->
-        <div class="bg-surface-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-5 sm:p-6 shadow-xl">
-          <h2 class="text-base sm:text-lg font-extrabold mb-4 flex items-center justify-between">
-            <span class="flex items-center gap-2">🏆 <span>排行榜</span></span>
-            <span class="text-xs text-surface-400 font-normal">依總積分排序</span>
-          </h2>
-          <div v-if="players.length === 0" class="text-center text-surface-400 py-8 text-sm">
-            還沒有玩家加入
-          </div>
-          <div v-else class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
-            <div
-              v-for="(player, index) in players"
-              :key="player.id"
-              class="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl transition-all hover:bg-white/10 cursor-pointer active:bg-white/15"
-              :class="index < 3 ? 'bg-white/5 border border-white/5' : ''"
-              @click="selectPlayer(player)"
-            >
-              <!-- Rank -->
-              <div
-                class="w-8 h-8 rounded-xl flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 shadow-sm"
-                :class="{
-                  'bg-amber-500/20 text-amber-300 border border-amber-500/30': index === 0,
-                  'bg-slate-400/20 text-slate-200 border border-slate-400/30': index === 1,
-                  'bg-amber-700/20 text-amber-500 border border-amber-700/30': index === 2,
-                  'bg-surface-700/50 text-surface-400': index > 2,
-                }"
-              >
-                {{ index < 3 ? ['🥇','🥈','🥉'][index] : index + 1 }}
-              </div>
-              <!-- Info -->
-              <div class="flex-1 min-w-0">
-                <div class="font-semibold text-xs sm:text-sm truncate text-white">{{ player.name }}</div>
-                <div class="text-[11px] text-surface-400">格子 {{ player.total_score % 100 }} · 第 {{ Math.floor(player.total_score / 100) }} 圈</div>
-              </div>
-              <!-- Score -->
-              <div class="text-right shrink-0">
-                <div class="text-sm sm:text-base font-black text-accent-400">{{ player.total_score }}</div>
-                <div class="text-[10px] text-surface-500">分</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Rewards Preview -->
-        <div class="bg-surface-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-5 sm:p-6 shadow-xl">
-          <h2 class="text-base sm:text-lg font-extrabold mb-4 flex items-center justify-between">
-            <span class="flex items-center gap-2">🎁 <span>獎勵里程碑</span></span>
-            <NuxtLink to="/rewards" class="text-xs text-primary-400 hover:underline">全覽 →</NuxtLink>
-          </h2>
-          <div class="space-y-2.5">
-            <div
-              v-for="reward in rewards"
-              :key="reward.id"
-              class="flex items-center gap-3 p-3 rounded-xl transition-all"
-              :class="highestScore >= reward.points_required ? 'bg-accent-500/10 border border-accent-500/30' : 'bg-white/5 border border-white/5'"
-            >
-              <div class="text-2xl shrink-0">{{ highestScore >= reward.points_required ? '🎉' : '🔒' }}</div>
-              <div class="flex-1 min-w-0">
-                <div class="text-xs sm:text-sm font-bold truncate text-white">{{ reward.name }}</div>
-                <div class="text-[11px] text-surface-400">{{ reward.points_required }} 分解鎖</div>
-              </div>
             </div>
           </div>
         </div>
@@ -244,20 +133,9 @@ interface Player {
   status: string
 }
 
-interface Reward {
-  id: number
-  points_required: number
-  name: string
-}
-
 const { data: playersData } = await useFetch<Player[]>('/api/players')
-const { data: rewardsData } = await useFetch<Reward[]>('/api/rewards')
 
 const players = computed(() => playersData.value || [])
-const rewards = computed(() => rewardsData.value || [])
-const highestScore = computed(() => players.value[0]?.total_score ?? 0)
-
-const activeMobileTab = ref<'board' | 'rank'>('board')
 const selectedPlayer = ref<Player | null>(null)
 
 function selectPlayer(p: Player) {
@@ -266,7 +144,6 @@ function selectPlayer(p: Player) {
 
 // Responsive Board Sizing
 const windowWidth = ref(1024)
-const isDesktop = computed(() => windowWidth.value >= 1280)
 
 const boardSize = computed(() => {
   if (windowWidth.value < 400) {
@@ -299,15 +176,10 @@ const tokenFontSizeClass = computed(() => {
   return 'text-sm'
 })
 
-const milestonePositions = computed(() => {
-  return new Set(rewards.value.map(r => r.points_required % 100))
-})
-
 interface Cell {
   index: number
   x: number
   y: number
-  isMilestone: boolean
 }
 
 const cells = computed<Cell[]>(() => {
@@ -319,7 +191,6 @@ const cells = computed<Cell[]>(() => {
       index: i,
       x: center + r * Math.cos(angle),
       y: center + r * Math.sin(angle),
-      isMilestone: milestonePositions.value.has(i) && i !== 0,
     }
   })
 })
@@ -360,9 +231,6 @@ function cellClass(cell: Cell) {
   if (cell.index === 0) {
     return 'bg-green-500/30 border border-green-400/50 text-green-300 shadow-lg shadow-green-500/20'
   }
-  if (cell.isMilestone) {
-    return 'bg-accent-500/20 border border-accent-400/30 text-accent-300 shadow-md shadow-accent-500/20 animate-pulse-slow'
-  }
   if (cell.index % 10 === 0) {
     return 'bg-primary-500/20 border border-primary-400/20 text-primary-300'
   }
@@ -387,19 +255,11 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: 'All-Star - 棋盤',
+  title: 'All-Star',
 })
 </script>
 
 <style scoped>
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-.animate-pulse-slow {
-  animation: pulse-slow 3s ease-in-out infinite;
-}
-
 @keyframes bounce-slow {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
@@ -416,4 +276,3 @@ useHead({
   animation: slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 </style>
-

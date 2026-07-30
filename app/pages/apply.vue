@@ -4,7 +4,7 @@
       <h1 class="text-3xl sm:text-4xl font-black mb-2 bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
         🚀 加入遊戲
       </h1>
-      <p class="text-surface-400 text-sm sm:text-lg">申請加入All-Star，開始你的冒險之旅！</p>
+      <p class="text-surface-400 text-sm sm:text-lg">申請加入 All-Star，A70 邁向鑽石！</p>
     </div>
 
     <!-- Success State -->
@@ -27,9 +27,6 @@
         <h3 class="text-xs sm:text-sm font-bold text-primary-300 mb-2">📖 遊戲說明</h3>
         <ul class="text-xs sm:text-sm text-surface-300 space-y-1.5 leading-relaxed">
           <li>• 完成任務即可獲得積分</li>
-          <li>• 積分對應棋盤上的位置（100 格環形棋盤）</li>
-          <li>• 累積積分解鎖精彩獎勵</li>
-          <li>• 無骰子、無倒退，只管衝衝衝！</li>
         </ul>
       </div>
 
@@ -117,6 +114,6 @@ async function handleSubmit() {
   }
 }
 
-useHead({ title: 'All-Star - 加入遊戲' })
+useHead({ title: 'All-Star' })
 </script>
 

@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '完成任務累積積分，在大富翁棋盤上前進，兌換精彩獎勵！' },
+        { name: 'description', content: '完成任務累積積分，在大富翁棋盤上前進！' },
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

@@ -31,16 +31,6 @@ CREATE TABLE IF NOT EXISTS score_records (
   FOREIGN KEY (task_id) REFERENCES tasks(id)
 );
 
--- 獎勵
-CREATE TABLE IF NOT EXISTS rewards (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  points_required INTEGER NOT NULL,
-  name TEXT NOT NULL,
-  status TEXT DEFAULT 'active' CHECK(status IN ('active', 'inactive')),
-  created_at TEXT DEFAULT (datetime('now')),
-  updated_at TEXT DEFAULT (datetime('now'))
-);
-
 -- 預設任務（僅在表為空時插入）
 INSERT INTO tasks (name, points) SELECT '開發', 1 WHERE NOT EXISTS (SELECT 1 FROM tasks);
 INSERT INTO tasks (name, points) SELECT '個人聚會', 1 WHERE NOT EXISTS (SELECT 1 FROM tasks WHERE name = '個人聚會');
@@ -49,7 +39,3 @@ INSERT INTO tasks (name, points) SELECT '家庭聚會', 3 WHERE NOT EXISTS (SELE
 INSERT INTO tasks (name, points) SELECT '教室課程', 5 WHERE NOT EXISTS (SELECT 1 FROM tasks WHERE name = '教室課程');
 INSERT INTO tasks (name, points) SELECT '推薦', 7 WHERE NOT EXISTS (SELECT 1 FROM tasks WHERE name = '推薦');
 INSERT INTO tasks (name, points) SELECT '長客', 10 WHERE NOT EXISTS (SELECT 1 FROM tasks WHERE name = '長客');
-
--- 預設獎勵（僅在表為空時插入）
-INSERT INTO rewards (points_required, name) SELECT 100, '飲料一杯' WHERE NOT EXISTS (SELECT 1 FROM rewards);
-INSERT INTO rewards (points_required, name) SELECT 200, '商場一餐' WHERE NOT EXISTS (SELECT 1 FROM rewards WHERE name = '商場一餐');

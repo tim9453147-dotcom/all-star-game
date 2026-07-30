@@ -6,11 +6,8 @@
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
           <NuxtLink to="/" class="flex items-center gap-3 group">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500 to-accent-700 flex items-center justify-center text-xl font-black shadow-lg shadow-accent-500/30 group-hover:scale-105 transition-transform">
-              🎲
-            </div>
             <span class="text-xl font-extrabold bg-gradient-to-r from-white via-primary-200 to-accent-300 bg-clip-text text-transparent">
-              All-Star
+              拯救老大
             </span>
           </NuxtLink>
 
@@ -49,7 +46,7 @@
 
     <!-- Mobile Bottom Navigation Bar (Dock) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface-900/90 backdrop-blur-2xl border-t border-white/10 px-4 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-2xl">
-      <div class="grid grid-cols-3 gap-1 max-w-sm mx-auto">
+      <div class="grid grid-cols-2 gap-1 max-w-sm mx-auto">
         <NuxtLink
           v-for="link in navLinks"
           :key="link.to"
@@ -62,18 +59,12 @@
         </NuxtLink>
       </div>
     </nav>
-
-    <!-- Footer -->
-    <footer class="border-t border-white/5 py-8 text-center text-surface-500 text-xs sm:text-sm px-4">
-      <p>© {{ new Date().getFullYear() }} All-Star — 累積積分，贏取獎勵</p>
-    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
 const navLinks = [
-  { to: '/', label: '棋盤', icon: '🎮' },
-  { to: '/rewards', label: '獎勵', icon: '🎁' },
-  { to: '/apply', label: '加入遊戲', icon: '🚀' },
+  { to: '/', label: 'Game', icon: '🎮' },
+  { to: '/apply', label: 'join us', icon: '🚀' },
 ]
 </script>

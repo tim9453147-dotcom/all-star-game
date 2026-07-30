@@ -1,8 +1,11 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  const { player_id, name } = body
+  const { player_id, name } = body || {}
 
-  if (!player_id || !name) {
+  const pid = typeof player_id === 'string' ? player_id.trim() : ''
+  const pName = typeof name === 'string' ? name.trim() : ''
+
+  if (!pid || !pName) {
     throw createError({ statusCode: 400, message: 'player_id and name are required' })
   }
 
@@ -11,13 +14,24 @@ export default defineEventHandler(async (event) => {
   try {
     const result = await db.prepare(
       "INSERT INTO players (player_id, name, status, created_at, updated_at) VALUES (?1, ?2, 'pending', datetime('now'), datetime('now')) RETURNING *"
-    ).bind(player_id, name).first()
+    ).bind(pid, pName).first()
     
     return result
   } catch (e: any) {
-    if (e.message && e.message.includes('UNIQUE')) {
+    console.error('[API /api/players/apply Error]:', e)
+
+    const msg = e?.message || e?.statusMessage || String(e || '')
+    if (/unique/i.test(msg)) {
       throw createError({ statusCode: 409, message: 'Player ID already exists' })
     }
-    throw createError({ statusCode: 500, message: 'Database error' })
+
+    if (e?.statusCode && e?.statusCode !== 500) {
+      throw e
+    }
+
+    throw createError({
+      statusCode: e?.statusCode || 500,
+      message: e?.message || 'Database error',
+    })
   }
 })

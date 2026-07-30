@@ -92,7 +92,6 @@ const navItems = [
   { to: '/admin/players', label: '玩家管理', icon: '👥' },
   { to: '/admin/tasks', label: '任務管理', icon: '📋' },
   { to: '/admin/scores', label: '積分管理', icon: '⭐' },
-  { to: '/admin/rewards', label: '獎勵管理', icon: '🎁' },
 ]
 
 const handleLogout = async () => {

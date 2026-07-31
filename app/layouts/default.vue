@@ -1,39 +1,35 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-surface-900 via-[#0f172a] to-[#1e1b4b] text-white font-sans flex flex-col pb-20 md:pb-0">
+  <div class="min-h-screen bg-gradient-to-br from-surface-900 via-[#0f172a] to-[#1e1b4b] text-white font-sans flex flex-col">
     <!-- Navigation -->
     <nav class="sticky top-0 z-40 backdrop-blur-xl bg-surface-900/80 border-b border-white/10 transition-all">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-          <!-- Logo -->
+          <!-- Logo / Title -->
           <NuxtLink to="/" class="flex items-center gap-3 group">
             <span class="text-xl font-extrabold bg-gradient-to-r from-white via-primary-200 to-accent-300 bg-clip-text text-transparent">
               All-Star
             </span>
           </NuxtLink>
 
-          <!-- Desktop Nav -->
-          <div class="hidden md:flex items-center gap-1">
-            <NuxtLink
-              v-for="link in navLinks"
-              :key="link.to"
-              :to="link.to"
-              class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 hover:bg-white/10"
-              :class="$route.path === link.to ? 'bg-primary-600/30 text-white border border-primary-500/30 shadow-sm' : 'text-surface-300'"
+          <!-- Top Navigation Right Actions -->
+          <div class="flex items-center gap-2.5">
+            <button
+              type="button"
+              @click="showJoinModal = true"
+              class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white shadow-md active:scale-95 cursor-pointer"
             >
-              <span>{{ link.icon }}</span>
-              <span>{{ link.label }}</span>
-            </NuxtLink>
-          </div>
+              <span>🚀</span>
+              <span>join us</span>
+            </button>
 
-          <!-- Mobile Top Right Admin Button -->
-          <div class="flex md:hidden items-center gap-2">
-            <NuxtLink
-              to="/admin"
-              class="p-2 rounded-xl bg-white/5 border border-white/10 text-surface-300 hover:text-white text-xs flex items-center gap-1.5 active:scale-95 transition"
+            <button
+              type="button"
+              @click="handleAdminClick"
+              class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/5 border border-white/10 text-surface-300 hover:text-white text-xs sm:text-sm flex items-center gap-1.5 active:scale-95 transition cursor-pointer"
             >
               <span>⚙️</span>
               <span class="font-medium">管理</span>
-            </NuxtLink>
+            </button>
           </div>
         </div>
       </div>
@@ -44,27 +40,40 @@
       <slot />
     </main>
 
-    <!-- Mobile Bottom Navigation Bar (Dock) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface-900/90 backdrop-blur-2xl border-t border-white/10 px-4 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-2xl">
-      <div class="grid grid-cols-2 gap-1 max-w-sm mx-auto">
-        <NuxtLink
-          v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
-          class="flex flex-col items-center justify-center py-2 px-1 rounded-xl transition-all duration-200 active:scale-95"
-          :class="$route.path === link.to ? 'text-accent-400 bg-white/10 font-bold' : 'text-surface-400 hover:text-surface-200'"
-        >
-          <span class="text-xl mb-0.5 leading-none">{{ link.icon }}</span>
-          <span class="text-[11px] font-medium tracking-tight">{{ link.label }}</span>
-        </NuxtLink>
-      </div>
-    </nav>
+    <!-- Join Us Pop-up Modal -->
+    <JoinUsModal :show="showJoinModal" @close="showJoinModal = false" />
+
+    <!-- Admin Login Pop-up Modal -->
+    <AdminLoginModal
+      :show="showLoginModal"
+      @close="showLoginModal = false"
+      @success="handleLoginSuccess"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-const navLinks = [
-  { to: '/', label: 'Game', icon: '🎮' },
-  { to: '/apply', label: 'join us', icon: '🚀' },
-]
+import { ref } from 'vue'
+
+const adminStore = useAdminStore()
+const router = useRouter()
+
+const showJoinModal = ref(false)
+const showLoginModal = ref(false)
+
+async function handleAdminClick() {
+  await adminStore.checkAuth()
+  if (adminStore.isAuthenticated) {
+    router.push('/admin')
+  } else {
+    showLoginModal.value = true
+  }
+}
+
+function handleLoginSuccess() {
+  showLoginModal.value = false
+  router.push('/admin')
+}
 </script>
+
+

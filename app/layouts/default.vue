@@ -7,7 +7,7 @@
           <!-- Logo -->
           <NuxtLink to="/" class="flex items-center gap-3 group">
             <span class="text-xl font-extrabold bg-gradient-to-r from-white via-primary-200 to-accent-300 bg-clip-text text-transparent">
-              拯救老大
+              All-Star
             </span>
           </NuxtLink>
 

@@ -79,16 +79,14 @@
         <div class="flex items-start justify-between gap-3">
           <div class="flex items-center gap-2.5">
             <div class="w-9 h-9 rounded-lg bg-surface-700 text-surface-200 border border-surface-600 flex items-center justify-center font-bold text-sm shrink-0">
-              {{ player.name ? player.name.charAt(0) : '?' }}
+              {{ player.player_id ? player.player_id.charAt(0) : '?' }}
             </div>
             <div>
               <div class="font-bold text-sm text-white flex items-center gap-2">
-                <span>{{ player.name }}</span>
+                <span>{{ player.player_id }}</span>
+                <span class="text-xs text-surface-400 font-normal">({{ player.name }})</span>
               </div>
               <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-[11px] font-mono text-surface-400">
-                  {{ player.player_id }}
-                </span>
                 <span
                   class="px-2 py-0.5 rounded-full text-[10px] font-medium flex items-center gap-1"
                   :class="{
@@ -154,6 +152,12 @@
             >
               啟用
             </button>
+            <button
+              class="px-2.5 py-1 bg-rose-500/10 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-medium hover:bg-rose-500/20 transition flex items-center gap-1"
+              @click="confirmDelete(player)"
+            >
+              🗑️ 刪除
+            </button>
           </div>
         </div>
       </div>
@@ -170,8 +174,8 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="border-b border-surface-700/60 bg-surface-800/80 text-surface-400 text-xs font-semibold uppercase tracking-wider">
-              <th class="px-5 py-3">ID</th>
-              <th class="px-5 py-3">玩家姓名</th>
+              <th class="px-5 py-3">遊戲 ID</th>
+              <th class="px-5 py-3">姓名</th>
               <th class="px-5 py-3">總積分</th>
               <th class="px-5 py-3">狀態</th>
               <th class="px-5 py-3">加入時間</th>
@@ -238,6 +242,12 @@
                   >
                     啟用
                   </button>
+                  <button
+                    class="px-2.5 py-1 bg-rose-500/10 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-medium hover:bg-rose-500/20 transition flex items-center gap-1"
+                    @click="confirmDelete(player)"
+                  >
+                    🗑️ 刪除
+                  </button>
                 </div>
               </td>
             </tr>
@@ -248,6 +258,58 @@
         </div>
       </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="showDeleteModal && targetPlayer"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          @click.self="showDeleteModal = false"
+        >
+          <div class="bg-surface-800 border border-surface-700 rounded-2xl p-5 sm:p-6 w-full max-w-md shadow-2xl space-y-4">
+            <div class="flex items-center gap-3 text-rose-400">
+              <div class="w-10 h-10 rounded-full bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-lg font-bold">
+                ⚠️
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white">確定要刪除玩家？</h3>
+                <p class="text-xs text-surface-400">此動作無法復原</p>
+              </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-surface-300 leading-relaxed bg-surface-900/60 p-3 rounded-xl border border-surface-700/50">
+              確定要刪除玩家 <span class="font-bold text-white">「{{ targetPlayer.name }}」</span>（ID: <span class="font-mono text-amber-300">{{ targetPlayer.player_id }}</span>）嗎？此動作將同時刪除該玩家的所有積分紀錄！
+            </p>
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+              <button
+                class="px-4 py-2 bg-surface-700 text-surface-200 border border-surface-600 rounded-xl text-xs font-semibold hover:bg-surface-600 transition"
+                :disabled="isDeleting"
+                @click="showDeleteModal = false"
+              >
+                取消
+              </button>
+              <button
+                class="px-4 py-2 bg-rose-500 text-white rounded-xl text-xs font-semibold hover:bg-rose-600 transition flex items-center gap-1.5 shadow-lg shadow-rose-500/20 disabled:opacity-50"
+                :disabled="isDeleting"
+                @click="executeDelete"
+              >
+                <span v-if="isDeleting">刪除中...</span>
+                <span v-else>確認刪除</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -269,6 +331,33 @@ const activeTab = ref((route.query.tab as string) || 'all')
 const searchQuery = ref('')
 const message = ref('')
 const messageType = ref<'success' | 'error'>('success')
+const showDeleteModal = ref(false)
+const targetPlayer = ref<Player | null>(null)
+const isDeleting = ref(false)
+
+function confirmDelete(player: Player) {
+  targetPlayer.value = player
+  showDeleteModal.value = true
+}
+
+async function executeDelete() {
+  if (!targetPlayer.value) return
+  isDeleting.value = true
+  try {
+    await $fetch(`/api/admin/players/${targetPlayer.value.id}`, { method: 'DELETE' })
+    message.value = `已成功刪除玩家「${targetPlayer.value.name}」`
+    messageType.value = 'success'
+    showDeleteModal.value = false
+    targetPlayer.value = null
+    await refresh()
+  } catch (e: any) {
+    message.value = e.data?.message || '刪除失敗'
+    messageType.value = 'error'
+  } finally {
+    isDeleting.value = false
+    setTimeout(() => { message.value = '' }, 3000)
+  }
+}
 
 watch(() => route.query.tab, (newTab) => {
   if (newTab) {

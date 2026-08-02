@@ -34,14 +34,14 @@
         <!-- Player ID -->
         <div>
           <label for="player_id" class="block text-xs sm:text-sm font-semibold text-surface-200 mb-2">
-            你的 ID
+            遊戲 ID
           </label>
           <input
             id="player_id"
             v-model="form.player_id"
             type="text"
             required
-            placeholder="輸入你想要的 ID"
+            placeholder="輸入遊戲 ID"
             class="w-full px-4 py-3 bg-surface-700/50 border border-white/10 rounded-xl text-base text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
           />
         </div>
@@ -49,17 +49,17 @@
         <!-- Name -->
         <div>
           <label for="name" class="block text-xs sm:text-sm font-semibold text-surface-200 mb-2">
-            你的姓名
+            姓名
           </label>
           <input
             id="name"
             v-model="form.name"
             type="text"
             required
-            placeholder="輸入你的姓名"
+            placeholder="輸入本名"
             class="w-full px-4 py-3 bg-surface-700/50 border border-white/10 rounded-xl text-base text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
           />
-          <p class="mt-1 text-xs text-surface-400">🔒 姓名僅供管理員核對，遊戲畫面中只會顯示您的 ID。</p>
+          <p class="mt-1 text-xs text-surface-400">🔒 姓名僅供管理員核對身分</p>
         </div>
 
         <!-- Error -->

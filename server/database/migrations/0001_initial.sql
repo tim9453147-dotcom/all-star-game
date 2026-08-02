@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   name TEXT NOT NULL,
   points INTEGER NOT NULL,
   status TEXT DEFAULT 'active' CHECK(status IN ('active', 'inactive')),
+  is_deleted INTEGER DEFAULT 0,
   created_at TEXT DEFAULT (datetime('now')),
   updated_at TEXT DEFAULT (datetime('now'))
 );

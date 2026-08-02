@@ -155,6 +155,7 @@ const INITIAL_SCHEMA_STATEMENTS = [
     name TEXT NOT NULL,
     points INTEGER NOT NULL,
     status TEXT DEFAULT 'active' CHECK(status IN ('active', 'inactive')),
+    is_deleted INTEGER DEFAULT 0,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
   );`,
@@ -193,6 +194,11 @@ async function ensureD1Tables(db: any) {
             }
           }
         }
+        try {
+          await db.prepare("ALTER TABLE tasks ADD COLUMN is_deleted INTEGER DEFAULT 0").run()
+        } catch (e) {
+          // Column already exists, ignore error
+        }
       } catch (e: any) {
         console.warn('D1 auto table initialization warning:', e?.message || e)
       }
@@ -216,5 +222,7 @@ export async function useDB(event: H3Event) {
 
   // Development: sql.js wrapped as D1
   const sqlite = await getDevDatabase()
-  return wrapSqlJsAsD1(sqlite)
+  const db = wrapSqlJsAsD1(sqlite)
+  await ensureD1Tables(db)
+  return db
 }

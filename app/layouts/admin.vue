@@ -54,12 +54,11 @@
     >
       <div class="p-6 border-b border-surface-700/80 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-base font-black shadow-lg shadow-primary-500/25">
-            ⚙️
+          <div class="w-8 h-8 rounded-lg bg-surface-700 border border-white/10 flex items-center justify-center text-xs font-bold text-primary-400">
+            AS
           </div>
           <div>
-            <h1 class="text-base font-bold text-white">All-Star 管理</h1>
-            <p class="text-xs text-surface-400">控制面板</p>
+            <h1 class="text-sm font-bold text-white tracking-wide">All-Star 管理</h1>
           </div>
         </div>
         <button class="md:hidden text-surface-400 hover:text-white p-1" @click="sidebarOpen = false">
@@ -77,29 +76,29 @@
           exact
           @click="sidebarOpen = false"
         >
-          <div class="flex items-center gap-3">
-            <span class="text-lg">{{ item.icon }}</span>
+          <div class="flex items-center gap-2.5">
+            <span class="text-base">{{ item.icon }}</span>
             <span>{{ item.label }}</span>
           </div>
           <span
             v-if="item.to === '/admin/players' && dashboard?.pendingPlayers > 0"
             class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30"
           >
-            {{ dashboard.pendingPlayers }} 待審
+            {{ dashboard.pendingPlayers }}
           </span>
         </NuxtLink>
       </nav>
 
       <div class="p-4 border-t border-surface-700/80 flex flex-col gap-2">
         <NuxtLink to="/" class="nav-link text-surface-400 hover:text-surface-200" @click="sidebarOpen = false">
-          ← 返回前台
+          ← 前台
         </NuxtLink>
         <button
           @click="handleLogout"
-          class="nav-link text-red-400 hover:text-red-300 hover:bg-red-950/40 text-left w-full flex items-center gap-2"
+          class="nav-link text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 text-left w-full flex items-center gap-2"
         >
           <span>🚪</span>
-          <span>登出系統</span>
+          <span>登出</span>
         </button>
       </div>
     </aside>
@@ -124,13 +123,13 @@
           <!-- Pending Badge -->
           <span
             v-if="item.to === '/admin/players' && dashboard?.pendingPlayers > 0"
-            class="absolute -top-1 -right-2 px-1.5 py-0.2 min-w-[16px] h-4 text-[9px] font-black rounded-full bg-amber-500 text-black flex items-center justify-center animate-pulse shadow-sm shadow-amber-500/50"
+            class="absolute -top-1 -right-2 px-1.5 py-0.2 min-w-[16px] h-4 text-[9px] font-black rounded-full bg-amber-500 text-black flex items-center justify-center shadow-sm shadow-amber-500/50"
           >
             {{ dashboard.pendingPlayers }}
           </span>
         </div>
         <span class="text-[11px] leading-tight">{{ item.label }}</span>
-        <!-- Glowing active bar below icon -->
+        <!-- Active bar below icon -->
         <span
           v-if="route.path === item.to"
           class="absolute bottom-0.5 w-6 h-0.5 rounded-full bg-primary-400 shadow-sm shadow-primary-400/80"
@@ -149,7 +148,6 @@ const route = useRoute()
 const { data: dashboard } = await useFetch<any>('/api/admin/dashboard')
 
 const navItems = [
-  { to: '/admin', label: '儀表板', icon: '📊' },
   { to: '/admin/players', label: '玩家管理', icon: '👥' },
   { to: '/admin/tasks', label: '任務管理', icon: '📋' },
   { to: '/admin/scores', label: '積分管理', icon: '⭐' },

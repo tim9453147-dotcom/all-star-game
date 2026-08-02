@@ -71,12 +71,12 @@
             topPlayerId === player.id ? 'ring-2 ring-amber-400 animate-pulse' : 'border-white/40'
           ]"
         >
-          {{ player.name.charAt(0) }}
+          {{ player.player_id.charAt(0).toUpperCase() }}
         </div>
 
         <!-- Desktop Hover Tooltip -->
         <div class="hidden sm:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-800/95 backdrop-blur border border-white/10 rounded-xl text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-2xl z-30">
-          <div class="font-bold text-white">{{ player.name }}</div>
+          <div class="font-bold text-white">{{ player.player_id }}</div>
           <div class="text-accent-400 font-semibold">{{ player.total_score }} 分</div>
           <div class="text-surface-400">第 {{ Math.floor(player.total_score / 100) }} 圈 · 格子 {{ player.total_score % 100 }}</div>
           <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 w-2 h-2 bg-surface-800 border-r border-b border-white/10 rotate-45" />

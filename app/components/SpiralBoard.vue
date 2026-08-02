@@ -76,10 +76,10 @@
             :key="player.id"
             class="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[9px] sm:text-xs font-black text-white shadow-lg border border-white/60"
             :class="getPlayerColor(player.id)"
-            :title="player.name"
+            :title="player.player_id"
             @click.stop="$emit('select-player', player)"
           >
-            {{ player.name.charAt(0) }}
+            {{ player.player_id.charAt(0).toUpperCase() }}
           </div>
           <div
             v-if="cellPlayers(cell.index).length > 2"

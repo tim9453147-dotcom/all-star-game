@@ -37,7 +37,7 @@
               class="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-black text-white shadow-md border border-white/60"
               :class="getPlayerColor(player.id)"
             >
-              {{ player.name.charAt(0) }}
+              {{ player.player_id.charAt(0).toUpperCase() }}
             </div>
             <div
               v-if="cellPlayers(cell.index).length > 2"

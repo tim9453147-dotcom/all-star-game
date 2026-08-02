@@ -3,14 +3,14 @@
     <!-- Pure S-shaped Serpentine Board -->
     <WindingBoard
       :players="players"
-      @select-player="selectPlayer"
+      @select-tile="handleSelectTile"
     />
 
     <!-- Mobile Player Details Bottom Sheet Modal -->
     <PlayerDetailModal
-      :player="selectedPlayer"
-      :is-leader="selectedPlayer?.id === topPlayer?.id"
-      @close="selectedPlayer = null"
+      :tile-num="selectedTileNum"
+      :players="selectedTilePlayers"
+      @close="closeTileModal"
     />
   </div>
 </template>
@@ -27,15 +27,17 @@ interface Player {
 const { data: playersData } = await useFetch<Player[]>('/api/players')
 
 const players = computed(() => playersData.value || [])
-const selectedPlayer = ref<Player | null>(null)
+const selectedTileNum = ref<number | null>(null)
+const selectedTilePlayers = ref<Player[]>([])
 
-const topPlayer = computed(() => {
-  if (!players.value || players.value.length === 0) return null
-  return [...players.value].sort((a, b) => b.total_score - a.total_score)[0]
-})
+function handleSelectTile(payload: { tileNum: number; players: Player[] }) {
+  selectedTileNum.value = payload.tileNum
+  selectedTilePlayers.value = payload.players
+}
 
-function selectPlayer(p: Player) {
-  selectedPlayer.value = p
+function closeTileModal() {
+  selectedTileNum.value = null
+  selectedTilePlayers.value = []
 }
 
 useHead({

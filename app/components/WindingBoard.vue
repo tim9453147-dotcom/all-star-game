@@ -83,7 +83,7 @@
               class="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-black text-white shadow-lg border border-white/60"
               :class="getPlayerColor(player.id)"
               :title="player.player_id"
-              @click.stop="$emit('select-player', player)"
+              @click.stop="handleTileClick(cell.num)"
             >
               {{ player.player_id.charAt(0).toUpperCase() }}
             </div>
@@ -116,7 +116,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'select-player', player: Player): void
+  (e: 'select-tile', payload: { tileNum: number; players: Player[] }): void
 }>()
 
 const COLS = 7
@@ -185,9 +185,7 @@ function getPlayerColor(id: number) {
 function handleTileClick(num: number) {
   highlightedTile.value = num
   const playersOnCell = cellPlayers(num)
-  if (playersOnCell.length > 0) {
-    emit('select-player', playersOnCell[0])
-  }
+  emit('select-tile', { tileNum: num, players: playersOnCell })
 }
 
 // Calculate SVG Smooth Bezier S-Path between cells (1 -> 2 -> ... -> 98)

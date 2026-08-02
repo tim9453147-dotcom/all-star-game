@@ -168,6 +168,12 @@
             >
               {{ task.status === 'active' ? '停用' : '啟用' }}
             </button>
+            <button
+              class="px-2.5 py-1 bg-rose-500/15 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-medium hover:bg-rose-500/25 transition"
+              @click="confirmDelete(task)"
+            >
+              刪除
+            </button>
           </div>
         </template>
 
@@ -271,6 +277,12 @@
                     >
                       {{ task.status === 'active' ? '停用' : '啟用' }}
                     </button>
+                    <button
+                      class="px-2.5 py-1 bg-rose-500/15 text-rose-300 border border-rose-500/30 rounded-lg text-xs font-medium hover:bg-rose-500/25 transition"
+                      @click="confirmDelete(task)"
+                    >
+                      刪除
+                    </button>
                   </div>
                 </td>
               </template>
@@ -278,6 +290,33 @@
           </tbody>
         </table>
         <div v-if="filteredTasks.length === 0" class="text-center py-8 text-surface-400 text-xs">尚無任務</div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div v-if="taskToDelete" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div class="bg-surface-800 border border-surface-700 rounded-xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+        <h3 class="text-base font-bold text-white">確認刪除任務</h3>
+        <p class="text-xs text-surface-300 leading-relaxed">
+          您確定要刪除任務 <span class="text-amber-400 font-bold">『{{ taskToDelete.name }}』</span> 嗎？
+          <br/>歷史累計的玩家積分紀錄將會完好保留，但此任務將無法再被選取。
+        </p>
+        <div class="flex justify-end gap-2 pt-2">
+          <button
+            @click="taskToDelete = null"
+            class="px-3.5 py-1.5 rounded-lg bg-surface-700 text-surface-300 hover:text-white text-xs font-medium transition"
+            :disabled="deleting"
+          >
+            取消
+          </button>
+          <button
+            @click="executeDelete"
+            class="px-4 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 disabled:opacity-50"
+            :disabled="deleting"
+          >
+            {{ deleting ? '刪除中...' : '確認刪除' }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -296,6 +335,27 @@ const messageType = ref<'success' | 'error'>('success')
 const editing = ref<number | null>(null)
 const editForm = reactive({ name: '', points: 0 })
 const newTask = reactive({ name: '', points: 10 })
+const taskToDelete = ref<Task | null>(null)
+const deleting = ref(false)
+
+function confirmDelete(task: Task) {
+  taskToDelete.value = task
+}
+
+async function executeDelete() {
+  if (!taskToDelete.value) return
+  deleting.value = true
+  try {
+    await $fetch(`/api/admin/tasks/${taskToDelete.value.id}`, { method: 'DELETE' })
+    showMessage('任務已成功刪除！')
+    taskToDelete.value = null
+    await refresh()
+  } catch (e: any) {
+    showMessage(e.data?.message || '刪除失敗', 'error')
+  } finally {
+    deleting.value = false
+  }
+}
 
 const filteredTasks = computed(() => {
   const all = tasks.value || []

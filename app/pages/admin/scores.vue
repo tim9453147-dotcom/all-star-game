@@ -46,12 +46,8 @@
       leave-to-class="transform -translate-y-2 opacity-0 scale-98"
     >
       <div v-if="showForm" class="bg-surface-800/80 border border-surface-700/80 rounded-xl p-4 shadow-xl backdrop-blur-md">
-        <div class="flex items-center justify-between mb-3 border-b border-surface-700/60 pb-2">
-          <h3 class="text-xs sm:text-sm font-bold text-amber-300">發放積分</h3>
-        </div>
-
         <form @submit.prevent="addScore" class="space-y-3">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
             <!-- Player Select -->
             <div>
               <label class="block text-[11px] text-surface-400 mb-1 font-medium">選擇玩家 *</label>
@@ -61,9 +57,9 @@
                   required
                   class="w-full px-3 py-2 bg-surface-900/90 border border-surface-700 rounded-lg text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition appearance-none cursor-pointer"
                 >
-                  <option value="" disabled>請選擇玩家 ({{ activePlayers.length }} 位)</option>
+                  <option value="" disabled>請選擇玩家</option>
                   <option v-for="p in activePlayers" :key="p.id" :value="p.id" class="bg-surface-800 text-white">
-                    {{ p.name }} (ID: {{ p.player_id }}) — {{ p.total_score }} 分
+                    {{ p.player_id }} ({{ p.name }}) — {{ p.total_score }} 分
                   </option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-surface-400 text-xs">▼</div>
@@ -79,7 +75,7 @@
                   required
                   class="w-full px-3 py-2 bg-surface-900/90 border border-surface-700 rounded-lg text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition appearance-none cursor-pointer"
                 >
-                  <option value="" disabled>請選擇任務 ({{ activeTasks.length }} 個)</option>
+                  <option value="" disabled>請選擇任務</option>
                   <option v-for="t in activeTasks" :key="t.id" :value="t.id" class="bg-surface-800 text-white">
                     {{ t.name }} (+{{ t.points }}分)
                   </option>
@@ -87,10 +83,9 @@
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-surface-400 text-xs">▼</div>
               </div>
             </div>
-          </div>
 
-          <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
-            <div class="flex-1">
+            <!-- Note Input -->
+            <div>
               <label class="block text-[11px] text-surface-400 mb-1 font-medium">備註（選填）</label>
               <input
                 v-model="scoreForm.note"
@@ -99,22 +94,17 @@
                 class="w-full px-3 py-2 bg-surface-900/90 border border-surface-700 rounded-lg text-xs sm:text-sm text-white placeholder-surface-500 focus:outline-none focus:border-amber-500 transition"
               />
             </div>
+          </div>
 
-            <div class="flex items-center justify-between sm:justify-start gap-3">
-              <div class="shrink-0 text-center px-3 py-1.5 rounded-lg bg-surface-900/90 border border-surface-700 min-w-[90px]">
-                <div class="text-[10px] text-surface-400">積分加總</div>
-                <div class="text-sm font-bold text-amber-400">
-                  {{ selectedTaskPoints > 0 ? '+' + selectedTaskPoints + ' 分' : '—' }}
-                </div>
-              </div>
-              <button
-                type="submit"
-                :disabled="!scoreForm.player_id || !scoreForm.task_id"
-                class="flex-1 sm:flex-none px-5 py-2 bg-amber-500 hover:bg-amber-400 text-surface-950 font-bold rounded-lg text-xs transition disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
-              >
-                確認發放
-              </button>
-            </div>
+          <div class="flex items-center justify-end gap-2.5 pt-1">
+            <span v-if="selectedTaskPoints > 0" class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold font-mono">+{{ selectedTaskPoints }} 分</span>
+            <button
+              type="submit"
+              :disabled="!scoreForm.player_id || !scoreForm.task_id"
+              class="px-5 py-2 bg-amber-500 hover:bg-amber-400 text-surface-950 font-bold rounded-lg text-xs transition disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 shrink-0"
+            >
+              確認發放
+            </button>
           </div>
         </form>
       </div>
@@ -130,7 +120,7 @@
             class="w-full px-3 py-1.5 bg-surface-900/90 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500 transition appearance-none cursor-pointer"
           >
             <option value="">全部玩家</option>
-            <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{ p.name }} ({{ p.player_id }})</option>
+            <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{ p.player_id }} ({{ p.name }})</option>
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-surface-400 text-xs">▼</div>
         </div>
@@ -159,10 +149,13 @@
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-center gap-2.5">
               <div class="w-8 h-8 rounded-lg bg-surface-700 text-surface-200 border border-surface-600 flex items-center justify-center font-bold text-xs shrink-0">
-                {{ record.player_name ? record.player_name.charAt(0) : '?' }}
+                {{ (record.player_game_id || record.player_name || '?').charAt(0) }}
               </div>
               <div>
-                <div class="font-bold text-sm text-white leading-tight">{{ record.player_name }}</div>
+                <div class="font-bold text-sm text-white leading-tight">
+                  {{ record.player_game_id || record.player_name }}
+                  <span v-if="record.player_game_id && record.player_name" class="text-xs text-surface-400 font-normal">({{ record.player_name }})</span>
+                </div>
                 <div class="text-xs text-amber-300/90 font-medium mt-0.5">{{ record.task_name }}</div>
               </div>
             </div>
@@ -269,7 +262,10 @@
               </template>
               <template v-else>
                 <td class="px-5 py-3 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
-                <td class="px-5 py-3 font-bold text-white">{{ record.player_name }}</td>
+                <td class="px-5 py-3 font-bold text-white">
+                  {{ record.player_game_id || record.player_name }}
+                  <span v-if="record.player_game_id && record.player_name" class="text-xs text-surface-400 font-normal ml-1">({{ record.player_name }})</span>
+                </td>
                 <td class="px-5 py-3 text-surface-300 font-medium">{{ record.task_name }}</td>
                 <td class="px-5 py-3 text-amber-400 font-bold">+{{ record.points }} 分</td>
                 <td class="px-5 py-3 text-surface-400 italic">{{ record.note || '—' }}</td>
@@ -291,7 +287,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 interface Player { id: number; player_id: string; name: string; total_score: number; status: string }
 interface Task { id: number; name: string; points: number; status: string }
-interface ScoreRecord { id: number; player_id: number; task_id: number; points: number; note: string; created_at: string; player_name: string; task_name: string }
+interface ScoreRecord { id: number; player_id: number; task_id: number; points: number; note: string; created_at: string; player_name: string; player_game_id?: string; task_name: string }
 
 const route = useRoute()
 const { data: allPlayers } = await useFetch<Player[]>('/api/admin/players')
@@ -326,6 +322,7 @@ const filteredRecords = computed(() => {
   if (!searchRecordQuery.value.trim()) return all
   const q = searchRecordQuery.value.toLowerCase().trim()
   return all.filter(r =>
+    (r.player_game_id && r.player_game_id.toLowerCase().includes(q)) ||
     (r.player_name && r.player_name.toLowerCase().includes(q)) ||
     (r.task_name && r.task_name.toLowerCase().includes(q)) ||
     (r.note && r.note.toLowerCase().includes(q))

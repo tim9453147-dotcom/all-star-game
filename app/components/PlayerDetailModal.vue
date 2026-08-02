@@ -19,16 +19,16 @@
         <!-- Player Profile Header -->
         <div class="flex items-center gap-4 mb-6">
           <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-500 to-primary-600 flex items-center justify-center text-2xl font-black text-white shadow-xl ring-2 ring-white/20">
-            {{ player.name.charAt(0) }}
+            {{ player.player_id ? player.player_id.charAt(0).toUpperCase() : '?' }}
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-xl font-extrabold text-white">{{ player.name }}</h3>
+              <h3 class="text-xl font-extrabold text-white">{{ player.player_id }}</h3>
               <span v-if="isLeader" class="px-2 py-0.5 text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full flex items-center gap-0.5">
                 👑 第一名
               </span>
             </div>
-            <p class="text-xs text-surface-400 font-mono">ID: {{ player.player_id }}</p>
+            <p class="text-xs text-surface-400 font-mono">匿名玩家</p>
           </div>
         </div>
 

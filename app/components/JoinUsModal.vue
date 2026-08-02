@@ -73,6 +73,7 @@
               placeholder="輸入你的姓名"
               class="w-full px-4 py-3 bg-surface-900/80 border border-white/10 rounded-xl text-base text-white placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
             />
+            <p class="mt-1 text-xs text-surface-400">🔒 姓名僅供管理員核對，遊戲畫面中只會顯示您的 ID。</p>
           </div>
 
           <div v-if="error" class="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs text-center">

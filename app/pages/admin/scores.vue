@@ -109,32 +109,45 @@
         </form>
       </div>
     </Transition>
-
-    <!-- Filter & Search Bar for Records -->
-    <div class="bg-surface-800/40 border border-surface-700/60 rounded-xl p-3 shadow-md backdrop-blur-md flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-      <div class="flex items-center gap-2 flex-1">
-        <label class="text-xs text-surface-400 shrink-0 font-medium">篩選：</label>
+    <div class="bg-surface-800/40 border border-surface-700/60 rounded-xl p-3 sm:p-4 shadow-md backdrop-blur-md flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+        <!-- Player Select Filter -->
         <div class="relative flex-1 sm:max-w-xs">
           <select
             v-model="filterPlayerId"
-            class="w-full px-3 py-1.5 bg-surface-900/90 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500 transition appearance-none cursor-pointer"
+            class="w-full pl-3 pr-8 py-2 bg-surface-900/90 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 transition appearance-none cursor-pointer"
           >
             <option value="">全部玩家</option>
             <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{ p.player_id }} ({{ p.name }})</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-surface-400 text-xs">▼</div>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-surface-400 text-xs">▼</div>
         </div>
-      </div>
 
-      <div class="relative flex-1 sm:max-w-xs">
-        <input
-          v-model="searchRecordQuery"
-          type="text"
-          placeholder="搜尋紀錄..."
-          class="w-full pl-8 pr-7 py-1.5 bg-surface-900/90 border border-surface-700 rounded-lg text-xs text-white placeholder-surface-500 focus:outline-none focus:border-amber-500 transition"
-        />
-        <span class="absolute left-2.5 top-2 text-surface-400 text-xs">🔍</span>
-        <button v-if="searchRecordQuery" @click="searchRecordQuery = ''" class="absolute right-2 top-2 text-surface-400 hover:text-white text-xs">✕</button>
+        <!-- Search Input -->
+        <div class="relative flex-1 sm:max-w-xs">
+          <input
+            v-model="searchRecordQuery"
+            type="text"
+            placeholder="搜尋紀錄 (玩家/任務/備註)..."
+            class="w-full pl-8 pr-7 py-2 bg-surface-900/90 border border-surface-700 rounded-lg text-xs text-white placeholder-surface-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 transition"
+          />
+          <span class="absolute left-2.5 top-2.5 text-surface-400 text-xs">🔍</span>
+          <button v-if="searchRecordQuery" @click="searchRecordQuery = ''" class="absolute right-2.5 top-2.5 text-surface-400 hover:text-white text-xs">✕</button>
+        </div>
+
+        <!-- Filter Reset & Result Counter -->
+        <div v-if="filterPlayerId || searchRecordQuery" class="flex items-center gap-2 shrink-0">
+          <button
+            @click="filterPlayerId = ''; searchRecordQuery = ''"
+            class="px-3 py-1.5 bg-surface-700/80 hover:bg-surface-700 text-surface-300 rounded-lg text-xs font-medium border border-surface-600 transition flex items-center gap-1 active:scale-95"
+          >
+            <span>✕</span>
+            <span>重置篩選</span>
+          </button>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 font-mono font-bold">
+            {{ filteredRecords.length }} / {{ (records || []).length }} 筆
+          </span>
+        </div>
       </div>
     </div>
 
@@ -147,32 +160,39 @@
       >
         <template v-if="editingRecord !== record.id">
           <div class="flex items-start justify-between gap-3">
+            <!-- Player Avatar & Info Chip -->
             <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-surface-700 text-surface-200 border border-surface-600 flex items-center justify-center font-bold text-xs shrink-0">
-                {{ (record.player_game_id || record.player_name || '?').charAt(0) }}
+              <div class="w-8 h-8 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center justify-center font-bold font-mono text-xs shrink-0">
+                {{ (record.player_game_id || record.player_name || '?').charAt(0).toUpperCase() }}
               </div>
               <div>
-                <div class="font-bold text-sm text-white leading-tight">
+                <div class="font-bold text-sm text-white leading-tight font-mono">
                   {{ record.player_game_id || record.player_name }}
-                  <span v-if="record.player_game_id && record.player_name" class="text-xs text-surface-400 font-normal">({{ record.player_name }})</span>
+                </div>
+                <div v-if="record.player_game_id && record.player_name" class="text-xs text-surface-400 font-normal">
+                  {{ record.player_name }}
                 </div>
                 <div class="text-xs text-amber-300/90 font-medium mt-0.5">{{ record.task_name }}</div>
               </div>
             </div>
 
+            <!-- Score Badge -->
             <div class="text-right shrink-0">
-              <span class="text-sm font-bold text-amber-400">
+              <span class="bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full font-bold font-mono text-xs">
                 +{{ record.points }} 分
               </span>
             </div>
           </div>
 
           <div class="flex items-center justify-between text-xs text-surface-400 pt-2 border-t border-surface-700/40">
-            <span class="truncate max-w-[180px] italic text-surface-400">{{ record.note || '無備註' }}</span>
+            <span class="truncate max-w-[180px] text-surface-400">
+              <template v-if="record.note && record.note.trim()">{{ record.note }}</template>
+              <template v-else><span class="text-surface-600 font-mono">—</span></template>
+            </span>
             <div class="flex items-center gap-2">
               <span class="text-[11px] text-surface-400 font-mono">{{ formatDate(record.created_at) }}</span>
               <button
-                class="px-2.5 py-1 bg-surface-700 text-surface-300 border border-surface-600 rounded-lg text-xs font-medium hover:bg-surface-600 transition"
+                class="px-2.5 py-1 bg-surface-700 text-surface-300 border border-surface-600 rounded-lg text-xs font-medium hover:bg-surface-600 transition active:scale-95"
                 @click="startRecordEdit(record)"
               >
                 編輯
@@ -190,26 +210,28 @@
                 v-model.number="editRecordForm.points"
                 type="number"
                 min="1"
-                class="w-full px-3 py-1.5 bg-surface-900 border border-surface-700 rounded-lg text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-500"
+                class="w-full px-3 py-1.5 bg-surface-900 border border-surface-700 rounded-lg text-xs font-bold font-mono text-amber-300 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 transition"
               />
             </div>
             <div>
-              <label class="block text-[11px] text-surface-400 mb-1 font-medium font-medium">修改備註</label>
+              <label class="block text-[11px] text-surface-400 mb-1 font-medium">修改備註</label>
               <input
                 v-model="editRecordForm.note"
-                class="w-full px-3 py-1.5 bg-surface-900 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500"
+                type="text"
+                placeholder="備註..."
+                class="w-full px-3 py-1.5 bg-surface-900 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 transition"
               />
             </div>
           </div>
-          <div class="flex gap-1.5 justify-end pt-2 border-t border-surface-700/40">
+          <div class="flex gap-2 justify-end pt-2 border-t border-surface-700/40">
             <button
-              class="px-3 py-1 bg-surface-700 text-surface-300 rounded-lg text-xs font-medium hover:bg-surface-600 transition"
+              class="px-3 py-1.5 bg-surface-700/80 text-surface-300 border border-surface-600 rounded-lg text-xs font-medium hover:bg-surface-700 transition active:scale-95"
               @click="editingRecord = null"
             >
               取消
             </button>
             <button
-              class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-500 transition"
+              class="px-3.5 py-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-lg text-xs font-semibold hover:bg-emerald-500/30 transition active:scale-95"
               @click="saveRecordEdit(record.id)"
             >
               儲存
@@ -218,8 +240,10 @@
         </template>
       </div>
 
-      <div v-if="filteredRecords.length === 0" class="bg-surface-800/30 border border-surface-700/40 rounded-xl p-8 text-center text-surface-400">
-        <p class="text-xs">尚無發放紀錄</p>
+      <!-- Mobile Empty State -->
+      <div v-if="filteredRecords.length === 0" class="bg-surface-800/30 border border-surface-700/40 rounded-xl p-8 text-center text-surface-400 flex flex-col items-center justify-center gap-2">
+        <span class="text-2xl opacity-60">📜</span>
+        <p class="text-xs font-medium text-surface-300">無符合條件的積分紀錄</p>
       </div>
     </div>
 
@@ -244,39 +268,92 @@
               class="hover:bg-white/[0.02] transition-colors"
             >
               <template v-if="editingRecord === record.id">
-                <td class="px-5 py-2.5 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
-                <td class="px-5 py-2.5 font-bold text-white">{{ record.player_name }}</td>
-                <td class="px-5 py-2.5 text-surface-300">{{ record.task_name }}</td>
-                <td class="px-5 py-2.5">
-                  <input v-model.number="editRecordForm.points" type="number" min="1" class="w-20 px-3 py-1 bg-surface-900 border border-surface-700 rounded-lg text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500" />
+                <td class="px-5 py-3 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
+                <td class="px-5 py-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center justify-center font-bold font-mono text-xs shrink-0">
+                      {{ (record.player_game_id || record.player_name || '?').charAt(0).toUpperCase() }}
+                    </div>
+                    <span class="font-bold text-white font-mono">{{ record.player_game_id || record.player_name }}</span>
+                  </div>
                 </td>
-                <td class="px-5 py-2.5">
-                  <input v-model="editRecordForm.note" class="w-full px-3 py-1 bg-surface-900 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" />
+                <td class="px-5 py-3 text-surface-300 font-medium">{{ record.task_name }}</td>
+                <td class="px-5 py-3">
+                  <input
+                    v-model.number="editRecordForm.points"
+                    type="number"
+                    min="1"
+                    class="w-24 px-3 py-1.5 bg-surface-900 border border-surface-700 rounded-lg text-xs text-amber-300 font-bold font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 transition"
+                  />
                 </td>
-                <td class="px-5 py-2.5 text-right">
-                  <div class="flex gap-1.5 justify-end">
-                    <button class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-lg text-xs font-semibold hover:bg-emerald-500/30 transition" @click="saveRecordEdit(record.id)">儲存</button>
-                    <button class="px-2.5 py-1 bg-surface-700 text-surface-300 rounded-lg text-xs font-medium hover:bg-surface-600 transition" @click="editingRecord = null">取消</button>
+                <td class="px-5 py-3">
+                  <input
+                    v-model="editRecordForm.note"
+                    type="text"
+                    placeholder="備註..."
+                    class="w-full px-3 py-1.5 bg-surface-900 border border-surface-700 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 transition"
+                  />
+                </td>
+                <td class="px-5 py-3 text-right">
+                  <div class="flex gap-2 justify-end">
+                    <button
+                      class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-lg text-xs font-semibold hover:bg-emerald-500/30 transition active:scale-95"
+                      @click="saveRecordEdit(record.id)"
+                    >
+                      儲存
+                    </button>
+                    <button
+                      class="px-3 py-1.5 bg-surface-700/80 text-surface-300 border border-surface-600 rounded-lg text-xs font-medium hover:bg-surface-700 transition active:scale-95"
+                      @click="editingRecord = null"
+                    >
+                      取消
+                    </button>
                   </div>
                 </td>
               </template>
               <template v-else>
-                <td class="px-5 py-3 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
-                <td class="px-5 py-3 font-bold text-white">
-                  {{ record.player_game_id || record.player_name }}
-                  <span v-if="record.player_game_id && record.player_name" class="text-xs text-surface-400 font-normal ml-1">({{ record.player_name }})</span>
+                <td class="px-5 py-3.5 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
+                <td class="px-5 py-3.5">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center justify-center font-bold font-mono text-xs shrink-0">
+                      {{ (record.player_game_id || record.player_name || '?').charAt(0).toUpperCase() }}
+                    </div>
+                    <div>
+                      <span class="font-bold text-white font-mono">{{ record.player_game_id || record.player_name }}</span>
+                      <span v-if="record.player_game_id && record.player_name" class="text-xs text-surface-400 font-normal ml-1 border-l border-surface-700 pl-1">
+                        {{ record.player_name }}
+                      </span>
+                    </div>
+                  </div>
                 </td>
-                <td class="px-5 py-3 text-surface-300 font-medium">{{ record.task_name }}</td>
-                <td class="px-5 py-3 text-amber-400 font-bold">+{{ record.points }} 分</td>
-                <td class="px-5 py-3 text-surface-400 italic">{{ record.note || '—' }}</td>
-                <td class="px-5 py-3 text-right">
-                  <button class="px-2.5 py-1 bg-surface-700 text-surface-300 border border-surface-600 rounded-lg text-xs font-medium hover:bg-surface-600 transition" @click="startRecordEdit(record)">編輯</button>
+                <td class="px-5 py-3.5 text-surface-300 font-medium">{{ record.task_name }}</td>
+                <td class="px-5 py-3.5">
+                  <span class="inline-block bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full font-bold font-mono text-xs">
+                    +{{ record.points }} 分
+                  </span>
+                </td>
+                <td class="px-5 py-3.5 text-surface-400">
+                  <template v-if="record.note && record.note.trim()">{{ record.note }}</template>
+                  <template v-else><span class="text-surface-600 font-mono">—</span></template>
+                </td>
+                <td class="px-5 py-3.5 text-right">
+                  <button
+                    class="px-2.5 py-1 bg-surface-700 text-surface-300 border border-surface-600 rounded-lg text-xs font-medium hover:bg-surface-600 transition active:scale-95"
+                    @click="startRecordEdit(record)"
+                  >
+                    編輯
+                  </button>
                 </td>
               </template>
             </tr>
           </tbody>
         </table>
-        <div v-if="filteredRecords.length === 0" class="text-center py-8 text-surface-400 text-xs">尚無積分紀錄</div>
+
+        <!-- Desktop Empty State -->
+        <div v-if="filteredRecords.length === 0" class="text-center py-12 text-surface-400 text-xs flex flex-col items-center justify-center gap-2">
+          <span class="text-3xl opacity-60">📜</span>
+          <p class="font-medium text-surface-300">無符合條件的積分紀錄</p>
+        </div>
       </div>
     </div>
   </div>

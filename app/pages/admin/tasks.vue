@@ -325,7 +325,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
-interface Task { id: number; name: string; points: number; status: string }
+interface Task { id: number; name: string; points: number; status: string; is_deleted?: number }
 
 const { data: tasks, refresh } = await useFetch<Task[]>('/api/admin/tasks')
 const searchQuery = ref('')

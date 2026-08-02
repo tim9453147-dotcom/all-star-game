@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const db = await useDB(event)
   
-  const task: any = await db.prepare("SELECT points FROM tasks WHERE id = ?1").bind(task_id).first()
+  const task: any = await db.prepare("SELECT points FROM tasks WHERE id = ?1 AND (is_deleted = 0 OR is_deleted IS NULL)").bind(task_id).first()
   if (!task) {
     throw createError({ statusCode: 404, message: 'Task not found' })
   }

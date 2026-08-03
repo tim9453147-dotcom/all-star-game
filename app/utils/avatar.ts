@@ -614,8 +614,8 @@ export const CHARACTERS: CharacterInfo[] = [
  * Normalizes avatar input into a valid image URL
  */
 export function getAvatarUrl(avatarId?: string): string {
-  if (!avatarId) {
-    return '/avatars/archer-1.png'
+  if (!avatarId || !avatarId.trim()) {
+    return '/avatars/char-1.png'
   }
 
   const trimmed = avatarId.trim()
@@ -643,12 +643,11 @@ export function getAvatarUrl(avatarId?: string): string {
  * Retrieves character metadata by ID, fallback to default character if not found
  */
 export function getCharacterMeta(avatarId?: string): CharacterInfo {
-  if (!avatarId) {
-    return NOVICE_CHARACTERS[0]
+  if (!avatarId || !avatarId.trim()) {
+    return CHARACTERS.find((c) => c.id === 'char-1') || NOVICE_CHARACTERS[0]
   }
 
-  // Match clean ID
-  const cleanId = avatarId.replace(/\.(png|jpg|jpeg|svg|webp)$/i, '')
+  const cleanId = avatarId.trim().replace(/\.(png|jpg|jpeg|svg|webp)$/i, '')
   const found = CHARACTERS.find((c) => c.id === cleanId)
 
   if (found) {

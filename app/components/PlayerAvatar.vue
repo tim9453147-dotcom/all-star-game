@@ -35,11 +35,19 @@
       <!-- Fallback SVG/Initial Letter if Image Fails or is Missing -->
       <div
         v-else
-        class="w-full h-full flex flex-col items-center justify-center relative z-10 font-bold select-none"
+        class="w-full h-full flex flex-col items-center justify-center relative z-10 font-bold select-none p-0.5"
         :style="{ backgroundColor: meta.color + '22', color: meta.color }"
       >
-        <span class="text-base leading-none drop-shadow">{{ meta.emoji || '👤' }}</span>
-        <span v-if="name" class="text-[10px] text-white font-mono mt-0.5 truncate max-w-[80%]">
+        <span
+          :class="size === 'xs' ? 'text-xs' : size === 'sm' ? 'text-sm' : 'text-base'"
+          class="leading-none drop-shadow"
+        >
+          {{ meta.emoji || '👤' }}
+        </span>
+        <span
+          v-if="name && size !== 'xs'"
+          class="text-[10px] text-white font-mono mt-0.5 truncate max-w-[80%]"
+        >
           {{ initialLetter }}
         </span>
       </div>

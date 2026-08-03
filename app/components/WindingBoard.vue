@@ -80,15 +80,6 @@
             <PlayerAvatar
               v-for="player in cellPlayers(cell.num).slice(0, 2)"
               :key="player.id"
-<<<<<<< Updated upstream
-              class="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-black text-white shadow-lg border border-white/60"
-              :class="getPlayerColor(player.id)"
-              :title="player.player_id"
-              @click.stop="handleTileClick(cell.num)"
-            >
-              {{ player.player_id.charAt(0).toUpperCase() }}
-            </div>
-=======
               :avatar="player.avatar"
               :name="player.name"
               size="xs"
@@ -96,9 +87,8 @@
               :border="true"
               class="transform transition-transform hover:scale-125 cursor-pointer shadow-md"
               :title="player.name"
-              @click.stop="$emit('select-player', player)"
+              @click.stop="handleTileClick(cell.num)"
             />
->>>>>>> Stashed changes
             <div
               v-if="cellPlayers(cell.num).length > 2"
               class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-surface-900 border border-white/80 flex items-center justify-center text-[7px] sm:text-[8px] font-bold text-white shadow"

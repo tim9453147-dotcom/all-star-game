@@ -20,6 +20,7 @@ interface Player {
   id: number
   player_id: string
   name: string
+  avatar?: string
   total_score: number
   status: string
 }

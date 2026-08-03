@@ -77,10 +77,22 @@
       >
         <!-- Top Row: Avatar, Name, Status Badge, Score -->
         <div class="flex items-start justify-between gap-3">
+<<<<<<< Updated upstream
           <div class="flex items-center gap-2.5">
             <div class="w-9 h-9 rounded-lg bg-surface-700 text-surface-200 border border-surface-600 flex items-center justify-center font-bold text-sm shrink-0">
               {{ player.player_id ? player.player_id.charAt(0) : '?' }}
             </div>
+=======
+          <div class="flex items-center gap-3">
+            <PlayerAvatar
+              :avatar="player.avatar"
+              :name="player.name"
+              size="md"
+              shape="square"
+              :border="true"
+              class="shrink-0 shadow-md"
+            />
+>>>>>>> Stashed changes
             <div>
               <div class="font-bold text-sm text-white flex items-center gap-2">
                 <span>{{ player.player_id }}</span>
@@ -188,10 +200,29 @@
               :key="player.id"
               class="hover:bg-white/[0.02] transition-colors"
             >
+<<<<<<< Updated upstream
               <td class="px-5 py-3 font-mono text-surface-300 font-medium">{{ player.player_id }}</td>
               <td class="px-5 py-3 font-bold text-white">{{ player.name }}</td>
               <td class="px-5 py-3 text-amber-400 font-bold">{{ player.total_score }}</td>
               <td class="px-5 py-3">
+=======
+              <td class="px-6 py-4 text-sm font-mono text-surface-300 font-semibold">{{ player.player_id }}</td>
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <PlayerAvatar
+                    :avatar="player.avatar"
+                    :name="player.name"
+                    size="sm"
+                    shape="square"
+                    :border="true"
+                    class="shrink-0 shadow-sm"
+                  />
+                  <span class="text-sm font-bold text-white">{{ player.name }}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm text-amber-400 font-black">⭐ {{ player.total_score }}</td>
+              <td class="px-6 py-4">
+>>>>>>> Stashed changes
                 <span
                   class="px-2 py-0.5 rounded-full text-[11px] font-medium inline-flex items-center gap-1.5"
                   :class="{
@@ -320,6 +351,7 @@ interface Player {
   id: number
   player_id: string
   name: string
+  avatar?: string
   total_score: number
   status: string
   created_at: string

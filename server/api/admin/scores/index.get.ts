@@ -8,7 +8,11 @@ export default defineEventHandler(async (event) => {
   const db = await useDB(event)
   
   let sql = `
+<<<<<<< Updated upstream
     SELECT s.*, p.name as player_name, p.player_id as player_game_id, t.name as task_name 
+=======
+    SELECT s.*, p.name as player_name, p.avatar as player_avatar, t.name as task_name 
+>>>>>>> Stashed changes
     FROM score_records s 
     LEFT JOIN players p ON s.player_id = p.id 
     LEFT JOIN tasks t ON s.task_id = t.id

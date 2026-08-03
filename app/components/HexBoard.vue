@@ -52,9 +52,10 @@
               v-if="cellPlayers(tileIndex).length > 0"
               class="absolute -top-1 -right-1 flex -space-x-1 z-30"
             >
-              <div
+              <PlayerAvatar
                 v-for="player in cellPlayers(tileIndex).slice(0, 2)"
                 :key="player.id"
+<<<<<<< Updated upstream
                 class="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[7px] sm:text-[8px] font-black text-white shadow-md border border-white/60"
                 :class="getPlayerColor(player.id)"
                 :title="player.player_id"
@@ -62,9 +63,20 @@
               >
                 {{ player.player_id.charAt(0).toUpperCase() }}
               </div>
+=======
+                :avatar="player.avatar"
+                :name="player.name"
+                size="xs"
+                shape="circle"
+                :border="true"
+                class="transform transition-transform hover:scale-125 cursor-pointer shadow-md"
+                :title="player.name"
+                @click.stop="$emit('select-player', player)"
+              />
+>>>>>>> Stashed changes
               <div
                 v-if="cellPlayers(tileIndex).length > 2"
-                class="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-surface-900 border border-white/60 flex items-center justify-center text-[7px] font-bold text-white shadow"
+                class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-surface-900 border border-white/80 flex items-center justify-center text-[7px] font-bold text-white shadow"
               >
                 +{{ cellPlayers(tileIndex).length - 2 }}
               </div>
@@ -83,6 +95,7 @@ interface Player {
   id: number
   player_id: string
   name: string
+  avatar?: string
   total_score: number
   status: string
 }

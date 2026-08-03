@@ -160,11 +160,23 @@
       >
         <template v-if="editingRecord !== record.id">
           <div class="flex items-start justify-between gap-3">
+<<<<<<< Updated upstream
             <!-- Player Avatar & Info Chip -->
             <div class="flex items-center gap-2.5">
               <div class="w-8 h-8 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center justify-center font-bold font-mono text-xs shrink-0">
                 {{ (record.player_game_id || record.player_name || '?').charAt(0).toUpperCase() }}
               </div>
+=======
+            <div class="flex items-center gap-3">
+              <PlayerAvatar
+                :avatar="record.player_avatar"
+                :name="record.player_name"
+                size="md"
+                shape="square"
+                :border="true"
+                class="shrink-0 shadow-sm"
+              />
+>>>>>>> Stashed changes
               <div>
                 <div class="font-bold text-sm text-white leading-tight font-mono">
                   {{ record.player_game_id || record.player_name }}
@@ -312,6 +324,7 @@
                 </td>
               </template>
               <template v-else>
+<<<<<<< Updated upstream
                 <td class="px-5 py-3.5 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
                 <td class="px-5 py-3.5">
                   <div class="flex items-center gap-2.5">
@@ -343,6 +356,27 @@
                   >
                     編輯
                   </button>
+=======
+                <td class="px-6 py-4 text-xs text-surface-400 font-mono">{{ formatDate(record.created_at) }}</td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-2.5">
+                    <PlayerAvatar
+                      :avatar="record.player_avatar"
+                      :name="record.player_name"
+                      size="sm"
+                      shape="square"
+                      :border="true"
+                      class="shrink-0 shadow-sm"
+                    />
+                    <span class="text-sm font-bold text-white">{{ record.player_name }}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm text-surface-300 font-medium">{{ record.task_name }}</td>
+                <td class="px-6 py-4 text-sm text-amber-400 font-black">+{{ record.points }} 分</td>
+                <td class="px-6 py-4 text-xs text-surface-400 italic">{{ record.note || '—' }}</td>
+                <td class="px-6 py-4 text-right">
+                  <button class="px-3 py-1.5 bg-surface-700 border border-white/10 text-surface-200 rounded-xl text-xs font-semibold hover:bg-surface-600 transition" @click="startRecordEdit(record)">編輯</button>
+>>>>>>> Stashed changes
                 </td>
               </template>
             </tr>
@@ -362,9 +396,13 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
-interface Player { id: number; player_id: string; name: string; total_score: number; status: string }
+interface Player { id: number; player_id: string; name: string; avatar?: string; total_score: number; status: string }
 interface Task { id: number; name: string; points: number; status: string }
+<<<<<<< Updated upstream
 interface ScoreRecord { id: number; player_id: number; task_id: number; points: number; note: string; created_at: string; player_name: string; player_game_id?: string; task_name: string }
+=======
+interface ScoreRecord { id: number; player_id: number; task_id: number; points: number; note: string; created_at: string; player_name: string; player_avatar?: string; task_name: string }
+>>>>>>> Stashed changes
 
 const route = useRoute()
 const { data: allPlayers } = await useFetch<Player[]>('/api/admin/players')

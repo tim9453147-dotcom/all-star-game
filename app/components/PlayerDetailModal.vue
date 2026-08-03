@@ -14,9 +14,63 @@
           ✕
         </button>
 
+<<<<<<< Updated upstream
         <!-- Player List Only -->
         <div class="my-2 max-h-60 overflow-y-auto space-y-2 py-1">
           <template v-if="players && players.length > 0">
+=======
+        <!-- Player Profile Header -->
+        <div class="flex items-center gap-4 mb-6">
+          <PlayerAvatar
+            :avatar="player.avatar"
+            :name="player.name"
+            size="xl"
+            shape="square"
+            :border="true"
+            :ring="true"
+            :show-badge="true"
+            class="shrink-0 shadow-xl"
+          />
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-xl font-extrabold text-white">{{ player.name }}</h3>
+              <span v-if="isLeader" class="px-2 py-0.5 text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full flex items-center gap-0.5">
+                👑 第一名
+              </span>
+            </div>
+            <p class="text-xs text-surface-400 font-mono">ID: {{ player.player_id }}</p>
+          </div>
+        </div>
+
+        <!-- Stats Cards Grid -->
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <div class="bg-surface-700/40 border border-white/10 rounded-2xl p-4 text-center backdrop-blur">
+            <div class="text-xs text-surface-400 mb-1 flex items-center justify-center gap-1">
+              <span>🏆</span> 累積總積分
+            </div>
+            <div class="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+              {{ player.total_score }}
+            </div>
+          </div>
+
+          <div class="bg-surface-700/40 border border-white/10 rounded-2xl p-4 text-center backdrop-blur">
+            <div class="text-xs text-surface-400 mb-1 flex items-center justify-center gap-1">
+              <span>📍</span> 棋盤位置
+            </div>
+            <div class="text-lg font-bold text-primary-300">
+              第 {{ lapCount }} 圈 · 格子 {{ currentTile }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress to Next Lap -->
+        <div class="bg-surface-900/60 border border-white/10 rounded-2xl p-4 mb-6">
+          <div class="flex items-center justify-between text-xs text-surface-300 font-semibold mb-2">
+            <span>本圈進度 ({{ currentTile }} / 100)</span>
+            <span class="text-accent-400 font-mono">{{ 100 - currentTile }} 格完賽</span>
+          </div>
+          <div class="w-full h-2.5 bg-surface-700 rounded-full overflow-hidden">
+>>>>>>> Stashed changes
             <div
               v-for="p in players"
               :key="p.id"
@@ -42,6 +96,7 @@ interface Player {
   id: number
   player_id: string
   name: string
+  avatar?: string
   total_score: number
   status: string
 }

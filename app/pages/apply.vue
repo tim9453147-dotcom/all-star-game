@@ -62,6 +62,11 @@
           <p class="mt-1 text-xs text-surface-400">🔒 姓名僅供管理員核對身分</p>
         </div>
 
+        <!-- Avatar Selector -->
+        <div>
+          <CharacterSelector v-model="form.avatar" />
+        </div>
+
         <!-- Error -->
         <div v-if="error" class="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs sm:text-sm">
           {{ error }}
@@ -85,6 +90,7 @@
 const form = reactive({
   player_id: '',
   name: '',
+  avatar: 'char-1',
 })
 const loading = ref(false)
 const error = ref('')
@@ -105,6 +111,7 @@ async function handleSubmit() {
       body: {
         player_id: form.player_id.trim(),
         name: form.name.trim(),
+        avatar: form.avatar,
       },
     })
     submitted.value = true

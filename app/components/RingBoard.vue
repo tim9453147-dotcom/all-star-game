@@ -63,6 +63,7 @@
         :style="{ top: player.y + 'px', left: player.x + 'px' }"
         @click.stop="$emit('select-player', player)"
       >
+<<<<<<< Updated upstream
         <div
           class="w-full h-full rounded-full flex items-center justify-center font-black text-white shadow-xl transition-all duration-300 border-2"
           :class="[
@@ -73,6 +74,17 @@
         >
           {{ player.player_id.charAt(0).toUpperCase() }}
         </div>
+=======
+        <PlayerAvatar
+          :avatar="player.avatar"
+          :name="player.name"
+          size="sm"
+          shape="circle"
+          :border="true"
+          :ring="topPlayerId === player.id"
+          class="w-full h-full shadow-xl transition-all duration-300 shrink-0"
+        />
+>>>>>>> Stashed changes
 
         <!-- Desktop Hover Tooltip -->
         <div class="hidden sm:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-800/95 backdrop-blur border border-white/10 rounded-xl text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-2xl z-30">
@@ -93,6 +105,7 @@ interface Player {
   id: number
   player_id: string
   name: string
+  avatar?: string
   total_score: number
   status: string
 }

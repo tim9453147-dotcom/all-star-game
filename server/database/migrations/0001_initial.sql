@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS players (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   player_id TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
+  avatar TEXT DEFAULT 'char-1',
   total_score INTEGER DEFAULT 0,
   status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'inactive')),
   created_at TEXT DEFAULT (datetime('now')),

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   await requireAdminSession(event)
   const id = getRouterParam(event, 'id')
   const body = await readBody(event)
-  const { status, name } = body
+  const { status, name, avatar } = body
 
   const db = await useDB(event)
   
@@ -19,6 +19,10 @@ export default defineEventHandler(async (event) => {
   if (name !== undefined) {
     updates.push(`name = ?${paramIndex++}`)
     values.push(name)
+  }
+  if (avatar !== undefined) {
+    updates.push(`avatar = ?${paramIndex++}`)
+    values.push(avatar)
   }
 
   if (updates.length === 0) {

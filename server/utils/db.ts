@@ -42,6 +42,14 @@ async function getDevDatabase(): Promise<SqlJsDatabase> {
     }
   }
 
+  // Ensure avatar column exists on players table
+  try {
+    _db.exec("ALTER TABLE players ADD COLUMN avatar TEXT DEFAULT 'char-1';")
+    persistDb()
+  } catch (e) {
+    // Column already exists or error ignored
+  }
+
   return _db
 }
 
@@ -145,6 +153,7 @@ const INITIAL_SCHEMA_STATEMENTS = [
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     player_id TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
+    avatar TEXT DEFAULT 'char-1',
     total_score INTEGER DEFAULT 0,
     status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'active', 'inactive')),
     created_at TEXT DEFAULT (datetime('now')),
@@ -192,6 +201,12 @@ async function ensureD1Tables(db: any) {
             for (const stmt of INITIAL_SCHEMA_STATEMENTS) {
               await db.prepare(stmt).run()
             }
+          }
+        } else {
+          try {
+            await db.prepare("ALTER TABLE players ADD COLUMN avatar TEXT DEFAULT 'char-1'").run()
+          } catch (e) {
+            // Column already exists
           }
         }
         try {

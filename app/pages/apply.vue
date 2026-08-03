@@ -90,7 +90,7 @@
 const form = reactive({
   player_id: '',
   name: '',
-  avatar: 'char-1',
+  avatar: 'archer-1',
 })
 const loading = ref(false)
 const error = ref('')

@@ -289,6 +289,8 @@ const filteredCharacters = computed(() => {
       matchCategory = char.isNovice === true || char.category === 'novice'
     } else if (selectedCategory.value === 'pixel_rpg') {
       matchCategory = !!char.classId || char.category === 'pixel_rpg'
+    } else if (['archer', 'mage', 'swordsman', 'warrior'].includes(selectedCategory.value)) {
+      matchCategory = char.classId === selectedCategory.value
     }
 
     // Search query match

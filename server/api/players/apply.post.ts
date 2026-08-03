@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 
   const pid = typeof player_id === 'string' ? player_id.trim() : ''
   const pName = typeof name === 'string' ? name.trim() : ''
-  const pAvatar = typeof avatar === 'string' && avatar.trim().length > 0 && avatar.trim().length <= 100 ? avatar.trim() : 'char-1'
+  const pAvatar = typeof avatar === 'string' && avatar.trim().length > 0 && avatar.trim().length <= 100 ? avatar.trim() : 'archer-1'
 
   if (!pid || !pName) {
     throw createError({ statusCode: 400, message: 'player_id and name are required' })

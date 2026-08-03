@@ -3,7 +3,7 @@ export interface CharacterInfo {
   num: number
   name: string
   title: string
-  category: 'novice' | 'pixel_rpg' | 'heroes' | 'beasts' | 'cyber' | 'cosmic'
+  category: 'novice' | 'pixel_rpg' | 'archer' | 'mage' | 'swordsman' | 'warrior'
   emoji: string
   color: string
   bgGradient: string
@@ -17,13 +17,13 @@ export interface CharacterInfo {
 }
 
 export const CHARACTER_CATEGORIES = [
-  { id: 'all', label: '🔥 全部角色' },
+  { id: 'all', label: '🔥 全部像素角色' },
   { id: 'novice', label: '🌱 初學者選單 (4大職業)' },
-  { id: 'pixel_rpg', label: '👾 像素職業進階 (16種型態)' },
-  { id: 'heroes', label: '⚔️ 英雄傳奇' },
-  { id: 'beasts', label: '🐾 靈獸神寵' },
-  { id: 'cyber', label: '🤖 賽博科幻' },
-  { id: 'cosmic', label: '🌌 宇宙星空' },
+  { id: 'pixel_rpg', label: '👾 職業進階 (16種型態)' },
+  { id: 'archer', label: '🏹 弓箭手系列' },
+  { id: 'mage', label: '🧙‍♂️ 法師系列' },
+  { id: 'swordsman', label: '🗡️ 劍士系列' },
+  { id: 'warrior', label: '🪓 戰士系列' },
 ] as const
 
 /**
@@ -309,316 +309,23 @@ export const PIXEL_RPG_CHARACTERS: CharacterInfo[] = [
   },
 ]
 
-export const CHARACTERS: CharacterInfo[] = [
-  // 🌱 初學者四大職業 + 👾 像素職業進階型態
-  ...PIXEL_RPG_CHARACTERS.filter((c, idx, self) => self.findIndex((t) => t.id === c.id) === idx),
-
-  // ⚔️ 英雄傳奇 (Heroes)
-  {
-    id: 'char-1',
-    num: 1,
-    name: '星際先鋒',
-    title: 'Pioneer Captain',
-    category: 'heroes',
-    emoji: '⚡',
-    color: '#3B82F6',
-    bgGradient: 'from-blue-600/30 to-indigo-600/30',
-    description: '擁有極限探險精神的前鋒戰士，帶領隊伍衝破重重考驗',
-    image: '/avatars/char-1.png',
-  },
-  {
-    id: 'char-2',
-    num: 2,
-    name: '賽博極客',
-    title: 'Cyber Architect',
-    category: 'cyber',
-    emoji: '🤖',
-    color: '#06B6D4',
-    bgGradient: 'from-cyan-600/30 to-blue-600/30',
-    description: '精通系統重構與數據流控的科技天才，解鎖所有關鍵要塞',
-    image: '/avatars/char-2.png',
-  },
-  {
-    id: 'char-3',
-    num: 3,
-    name: '聖光騎士',
-    title: 'Aegis Paladin',
-    category: 'heroes',
-    emoji: '🛡️',
-    color: '#F59E0B',
-    bgGradient: 'from-amber-500/30 to-yellow-600/30',
-    description: '堅不可摧的團隊防禦核心，無懼任何關卡考驗與阻礙',
-    image: '/avatars/char-3.png',
-  },
-  {
-    id: 'char-4',
-    num: 4,
-    name: '奧術導師',
-    title: 'Arcane Sage',
-    category: 'heroes',
-    emoji: '🧙‍♂️',
-    color: '#8B5CF6',
-    bgGradient: 'from-purple-600/30 to-indigo-600/30',
-    description: '掌控演算法與智慧奧秘的智囊，精準推演最佳獲勝路徑',
-    image: '/avatars/char-4.png',
-  },
-  {
-    id: 'char-5',
-    num: 5,
-    name: '影之忍者',
-    title: 'Shadow Assassin',
-    category: 'cyber',
-    emoji: '🥷',
-    color: '#EC4899',
-    bgGradient: 'from-pink-600/30 to-rose-600/30',
-    description: '疾風般的極致敏捷專家，於暗影中快速超越對手',
-    image: '/avatars/char-5.png',
-  },
-  {
-    id: 'char-6',
-    num: 6,
-    name: '宇宙冒險家',
-    title: 'Cosmic Voyager',
-    category: 'cosmic',
-    emoji: '🚀',
-    color: '#10B981',
-    bgGradient: 'from-emerald-600/30 to-teal-600/30',
-    description: '勇於跨越星際邊界的開拓者，探索未知棋盤領域',
-    image: '/avatars/char-6.png',
-  },
-
-  // 🐾 靈獸神寵 (Beasts)
-  {
-    id: 'char-7',
-    num: 7,
-    name: '靈狐策劃',
-    title: 'Mystic Fox',
-    category: 'beasts',
-    emoji: '🦊',
-    color: '#F97316',
-    bgGradient: 'from-orange-600/30 to-amber-600/30',
-    description: '機智靈敏的策劃高手，以巧妙靈動策略掌控全場節奏',
-    image: '/avatars/char-7.png',
-  },
-  {
-    id: 'char-8',
-    num: 8,
-    name: '霸氣獅王',
-    title: 'Cyber Lion King',
-    category: 'beasts',
-    emoji: '🦁',
-    color: '#EAB308',
-    bgGradient: 'from-yellow-500/30 to-amber-600/30',
-    description: '萬獸之王者，擁有無與倫比的領導氣場與破關決心',
-    image: '/avatars/char-8.png',
-  },
-  {
-    id: 'char-9',
-    num: 9,
-    name: '龍之守護',
-    title: 'Dragon Guardian',
-    category: 'beasts',
-    emoji: '🐉',
-    color: '#EF4444',
-    bgGradient: 'from-red-600/30 to-rose-600/30',
-    description: '傳承熾熱龍魂的守護者，源源不絕的爆發潛力能量',
-    image: '/avatars/char-9.png',
-  },
-  {
-    id: 'char-10',
-    num: 10,
-    name: '霓虹酷貓',
-    title: 'Neon Panther',
-    category: 'beasts',
-    emoji: '🐱',
-    color: '#06B6D4',
-    bgGradient: 'from-cyan-500/30 to-sky-600/30',
-    description: '靈敏炫酷的夜行戰士，在光影閃爍間敏捷移動',
-    image: '/avatars/char-10.png',
-  },
-  {
-    id: 'char-11',
-    num: 11,
-    name: '功夫熊貓',
-    title: 'Zen Master Panda',
-    category: 'beasts',
-    emoji: '🐼',
-    color: '#84CC16',
-    bgGradient: 'from-lime-600/30 to-emerald-600/30',
-    description: '以柔克剛的深厚武學宗師，沉著面對各項高難度考驗',
-    image: '/avatars/char-11.png',
-  },
-  {
-    id: 'char-12',
-    num: 12,
-    name: '智慧獵鷹',
-    title: 'Cyber Falcon',
-    category: 'beasts',
-    emoji: '🦉',
-    color: '#6366F1',
-    bgGradient: 'from-indigo-600/30 to-violet-600/30',
-    description: '俯瞰全場的高空戰略家，精準捕捉獲取高分的每次契機',
-    image: '/avatars/char-12.png',
-  },
-
-  // 🌌 宇宙幻境 (Cosmic & Magic)
-  {
-    id: 'char-13',
-    num: 13,
-    name: '水晶精靈',
-    title: 'Crystal Sorceress',
-    category: 'cosmic',
-    emoji: '💎',
-    color: '#EC4899',
-    bgGradient: 'from-fuchsia-600/30 to-pink-600/30',
-    description: '煥發璀璨寶石光彩的精靈，將積分轉換為極致奇蹟',
-    image: '/avatars/char-13.png',
-  },
-  {
-    id: 'char-14',
-    num: 14,
-    name: '夢幻獨角獸',
-    title: 'Cosmic Unicorn',
-    category: 'cosmic',
-    emoji: '🦄',
-    color: '#A855F7',
-    bgGradient: 'from-purple-500/30 to-pink-500/30',
-    description: '帶來幸運與光芒的傳奇星寵，解鎖驚喜連連的破關獎勵',
-    image: '/avatars/char-14.png',
-  },
-  {
-    id: 'char-15',
-    num: 15,
-    name: '雷霆領主',
-    title: 'Thunder Overlord',
-    category: 'cyber',
-    emoji: '⚡',
-    color: '#3B82F6',
-    bgGradient: 'from-blue-600/30 to-cyan-600/30',
-    description: '掌控強大電流爆發力的戰將，短時間內創造亮眼成績',
-    image: '/avatars/char-15.png',
-  },
-  {
-    id: 'char-16',
-    num: 16,
-    name: '全明星王者',
-    title: 'All-Star Champion',
-    category: 'heroes',
-    emoji: '👑',
-    color: '#EAB308',
-    bgGradient: 'from-amber-400/30 to-yellow-600/30',
-    description: '星光熠熠的全明星殿堂霸主，象徵至高無上的頂尖榮譽',
-    image: '/avatars/char-16.png',
-  },
-
-  // ⚙️ 新設計角色 (17 ~ 24)
-  {
-    id: 'char-17',
-    num: 17,
-    name: '像素黑客',
-    title: 'Pixel Matrix Hacker',
-    category: 'cyber',
-    emoji: '👾',
-    color: '#10B981',
-    bgGradient: 'from-emerald-500/30 to-cyan-600/30',
-    description: '穿梭於數字位元間的復古黑客，突破傳統限制的破關專家',
-    image: '/avatars/char-17.png',
-  },
-  {
-    id: 'char-18',
-    num: 18,
-    name: '烈焰鳳凰',
-    title: 'Flame Phoenix',
-    category: 'beasts',
-    emoji: '🔥',
-    color: '#EF4444',
-    bgGradient: 'from-red-500/30 to-orange-600/30',
-    description: '浴火重生的傳奇神鳥，越戰越勇、展翅凌駕巔峰榜首',
-    image: '/avatars/char-18.png',
-  },
-  {
-    id: 'char-19',
-    num: 19,
-    name: '霜雪女皇',
-    title: 'Frost Empress',
-    category: 'cosmic',
-    emoji: '❄️',
-    color: '#38BDF8',
-    bgGradient: 'from-sky-400/30 to-blue-600/30',
-    description: '掌控絕對零度與靜謐智慧的戰術家，冷靜破解繁複難題',
-    image: '/avatars/char-19.png',
-  },
-  {
-    id: 'char-20',
-    num: 20,
-    name: '機甲泰坦',
-    title: 'Mecha Vanguard',
-    category: 'cyber',
-    emoji: '⚙️',
-    color: '#94A3B8',
-    bgGradient: 'from-slate-500/30 to-zinc-600/30',
-    description: '配備先進科幻推進器的重裝機甲，穩健踏出每一步驟',
-    image: '/avatars/char-20.png',
-  },
-  {
-    id: 'char-21',
-    num: 21,
-    name: '星雲漫遊者',
-    title: 'Nebula Stargazer',
-    category: 'cosmic',
-    emoji: '🌌',
-    color: '#8B5CF6',
-    bgGradient: 'from-violet-600/30 to-fuchsia-600/30',
-    description: '漫遊於深空星雲的流浪詩人，帶來未知而絢麗的探索驚喜',
-    image: '/avatars/char-21.png',
-  },
-  {
-    id: 'char-22',
-    num: 22,
-    name: '神射鷹眼',
-    title: 'Apex Marksman',
-    category: 'heroes',
-    emoji: '🎯',
-    color: '#F97316',
-    bgGradient: 'from-orange-500/30 to-red-600/30',
-    description: '百發百中的遠程精準執行者，鎖定目標即勢在必得',
-    image: '/avatars/char-22.png',
-  },
-  {
-    id: 'char-23',
-    num: 23,
-    name: '炫音節奏師',
-    title: 'Sonic DJ Master',
-    category: 'cyber',
-    emoji: '🎵',
-    color: '#F43F5E',
-    bgGradient: 'from-rose-500/30 to-pink-600/30',
-    description: '引領全場歡樂氣氛的聲光大師，讓每一次挑戰都充滿熱血',
-    image: '/avatars/char-23.png',
-  },
-  {
-    id: 'char-24',
-    num: 24,
-    name: '黃金 MVP',
-    title: 'Golden Legend',
-    category: 'heroes',
-    emoji: '🏆',
-    color: '#F59E0B',
-    bgGradient: 'from-amber-400/30 to-yellow-500/30',
-    description: '榮膺全場最高榮譽的金牌成就王者，展現無與倫比的亮眼實力',
-    image: '/avatars/char-24.png',
-  },
-]
+export const CHARACTERS: CharacterInfo[] = PIXEL_RPG_CHARACTERS
 
 /**
  * Normalizes avatar input into a valid image URL
  */
 export function getAvatarUrl(avatarId?: string): string {
   if (!avatarId || !avatarId.trim()) {
-    return '/avatars/char-1.png'
+    return '/avatars/archer-1.png'
   }
 
   const trimmed = avatarId.trim()
+
+  // Legacy char-* check -> replace with mapped pixel character
+  if (/^char-\d+/i.test(trimmed) || /^\/avatars\/char-\d+/i.test(trimmed)) {
+    const meta = getCharacterMeta(trimmed)
+    return meta.image
+  }
 
   // Full URL or Data URI
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
@@ -635,7 +342,7 @@ export function getAvatarUrl(avatarId?: string): string {
     return `/avatars/${trimmed}`
   }
 
-  // Normal character ID (e.g. archer-1, char-1)
+  // Normal character ID (e.g. archer-1, mage-1, swordsman-1, warrior-1)
   return `/avatars/${trimmed}.png`
 }
 
@@ -644,7 +351,7 @@ export function getAvatarUrl(avatarId?: string): string {
  */
 export function getCharacterMeta(avatarId?: string): CharacterInfo {
   if (!avatarId || !avatarId.trim()) {
-    return CHARACTERS.find((c) => c.id === 'char-1') || NOVICE_CHARACTERS[0]
+    return CHARACTERS.find((c) => c.id === 'archer-1') || NOVICE_CHARACTERS[0]
   }
 
   const cleanId = avatarId.trim().replace(/\.(png|jpg|jpeg|svg|webp)$/i, '')
@@ -654,7 +361,7 @@ export function getCharacterMeta(avatarId?: string): CharacterInfo {
     return found
   }
 
-  // Try extracting number
+  // Legacy char-N mapping to pixel RPG characters
   const match = cleanId.match(/char-(\d+)/)
   if (match) {
     const num = parseInt(match[1], 10)
@@ -671,15 +378,15 @@ export function getCharacterMeta(avatarId?: string): CharacterInfo {
   // Fallback
   return {
     id: avatarId,
-    num: 1,
-    name: '玩家角色',
-    title: 'Player Avatar',
+    num: 101,
+    name: '像素勇者',
+    title: 'Pixel Hero',
     category: 'novice',
-    emoji: '👤',
+    emoji: '⚔️',
     color: '#3B82F6',
     bgGradient: 'from-blue-600/30 to-indigo-600/30',
-    description: '全明星挑戰賽精彩角色',
-    image: getAvatarUrl(avatarId),
+    description: '全明星挑戰賽像素角色',
+    image: '/avatars/archer-1.png',
   }
 }
 

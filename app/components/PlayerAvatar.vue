@@ -79,7 +79,7 @@ const props = withDefaults(
     showBadge?: boolean
   }>(),
   {
-    avatar: 'char-1',
+    avatar: 'archer-1',
     name: '',
     size: 'md',
     shape: 'square',

@@ -1,6 +1,6 @@
 <template>
-  <div class="py-3 sm:py-6 px-2 sm:px-4 max-w-5xl mx-auto flex flex-col items-center">
-    <!-- Pure S-shaped Serpentine Board -->
+  <div class="h-[calc(100dvh-4rem)] w-full max-w-5xl mx-auto flex flex-col items-center justify-center p-1 sm:p-4 overflow-hidden">
+    <!-- Pure S-shaped Serpentine Board (1..100 Zero Scroll) -->
     <WindingBoard
       :players="players"
       @select-tile="handleSelectTile"
